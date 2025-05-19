@@ -4,9 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <!-- Link for icons -->
+     <script src="https://kit.fontawesome.com/0746f1ba48.js" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="styles/Main-chat.css">
+    <title>Chat Application</title>
 </head>
 <body>
-    
+    <!-- left side bar containing user list -->
+    <section>
+        <header>
+            <a href="pages/login.html"><i class="fa-solid fa-arrow-left"></i></a>
+            <h1>
+                Chat Application
+            </h1>
+            <div>
+                <ul>
+
+                </ul>
+            </div>
+        </header>
+    </section>
+
+    <!-- Message section -->
+     <section>
+        <header>
+            <h2>Username</h2>
+            <h5>Availible</h5>
+        </header>
+        <div>
+            <div>
+                <div>
+                    <p>Message</p>
+                    <p>Time</p>
+            </div>
+            <form action="/send" method="POST">
+                <input type="text" name="message" placeholder="Type your message here">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+     </section>
 </body>
 </html>
