@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/register.css">
+    <!-- Link for icons -->
+     <script src="https://kit.fontawesome.com/0746f1ba48.js" crossorigin="anonymous"></script>
     <title>Register Page</title>
 </head>
 <body>
     <main>
-        <h1>
+       <div class="container">
+        <div class="header">
+            <a href="login.html"><i class="fa-solid fa-arrow-left"></i></a>
+         <h1>
             Fill in the form to register
         </h1>
-        form action="/register" method="POST">
+        </div>
+        <form action="" method="POST">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="userName" name="username" required>
             <br>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="passWord" name="password" required>
             <br>
-            <button type="submit">Register</button>
+            <button type="submit" onclick="registerUser()">Register</button>
+       </div>
     </main>
+    <script src="../js/register.js"></script>
 </body>
 </html>

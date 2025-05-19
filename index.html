@@ -4,9 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <!-- Link for icons -->
+     <script src="https://kit.fontawesome.com/0746f1ba48.js" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="styles/Main-chat.css">
+    <title>Chat Application</title>
 </head>
 <body>
-    
+    <!-- left side bar containing user list -->
+    <section>
+        <header>
+            <a href="pages/login.html"><i class="fa-solid fa-arrow-left"></i></a>
+            <h1>
+                Chat Application
+            </h1>
+            <!-- Change app settings & modify user settings -->
+             <a href="#"><i class="fa-solid fa-gear"></i></a>
+            <div class="settings">
+                <div class="makeGroup">
+                    <a href="#"><i class="fa-solid fa-users"></i>Group Settings</a>
+                    <div class="group">
+                        <h2>Group</h2>
+                        <ul>
+                            <li><a href="#">Create a group</a></li>
+                            <li><a href="#">Remove a group</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <a href="#"><i class="fa-solid fa-user"></i>User Settings</a>
+                    <h2>User</h2>
+                    <ul>
+                        <li><a href="#">Change Password</a></li>
+                        <li><a href="#">Change Username</a></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- listing the users -->
+            <div>
+                <ul>
+                    <li>
+                        <a href="#">Add a friend</a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+    </section>
+
+    <!-- Message section -->
+     <section>
+        <header>
+            <h2>Username</h2>
+            <h5>Availible</h5>
+        </header>
+        <div>
+            <div>
+                <div>
+                    <p>Message</p>
+                    <p>Time</p>
+            </div>
+            <form action="/send" method="POST">
+                <input type="text" name="message" placeholder="Type your message here">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+     </section>
 </body>
 </html>
