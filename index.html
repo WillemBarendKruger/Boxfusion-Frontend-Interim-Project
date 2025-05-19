@@ -12,21 +12,21 @@
 <body>
    <div class="container">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <h3>Settings</h3>
       <div class="menu">
-        <button class="menu-btn">User Settings</button>
+        <button class="menu-btn">Update Username</button>
         <button class="menu-btn">Add User</button>
         <button class="menu-btn">Create new group</button>
-        <button class="menu-btn">Log Out</button>
+        <button class="menu-btn" onclick="logOut()">Log Out</button>
       </div>
     </aside>
 
     <!-- Chat Application -->
     <main class="main-chat">
       <header class="app-header">
-        <span class="gear-icon"><i class="fa-solid fa-gear"></i></span>
-        <h2>Application Name</h2>
+        <button class="gear-icon" onclick="showSidebar()"><i class="fa-solid fa-gear"></i></button>
+        <h2>UserName Name</h2>
       </header>
 
       <section class="user-list">
@@ -55,5 +55,6 @@
       </div>
     </section>
   </div>
+  <script src="./js/main-chat.js"></script>
 </body>
 </html>
