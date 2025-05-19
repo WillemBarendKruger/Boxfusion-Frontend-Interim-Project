@@ -4,7 +4,15 @@
 
 // Paddword hashing: Web Crypto API
 
-
+// Show sidebar
+function showSidebar() {
+    let sidebar = document.getElementById("sidebar");
+    if (sidebar.style.display === "none" || sidebar.style.display === "") {;
+        sidebar.style.display = "block";
+    } else {
+        sidebar.style.display = "none";
+    }
+}
 
 // check user activity
 function checkUserActivity() {
@@ -21,4 +29,12 @@ function checkUserActivity() {
         }
     }
     localStorage.setItem('lastActiveTime', new Date().getTime());
+}
+
+// logout user
+function logOut() {
+    localStorage.removeItem('lastActiveTime');
+    localStorage.removeItem('user_active');
+    alert("You have been logged out.");
+    window.location.href = "./pages/login.html";
 }
