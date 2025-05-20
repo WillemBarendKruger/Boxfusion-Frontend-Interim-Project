@@ -1,7 +1,3 @@
-
-//NOTES
-// This JavaScript function, checkUserActivity() , checks the time difference between the current time and the last active time. If the time difference is greater than 30 seconds (indicating inactivity), it sets user_active to false and logs "User is inactive" to the console.
-
 // Show sidebar
 function showSidebar() {
     let sidebar = document.getElementById("sidebar");
