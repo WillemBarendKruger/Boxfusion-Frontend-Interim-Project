@@ -21,7 +21,7 @@ function registerUser() {
             console.log("Hashed Password: " + hashHex);
 
             // Store the user data in local storage
-            let userData = { Username: username, Password: hashHex };
+            let userData = { Username: username, Password: hashHex, user_Active: Date.now() };
             users.push(userData);
             localStorage.setItem('users', JSON.stringify(users));
             alert("User registered successfully!");
