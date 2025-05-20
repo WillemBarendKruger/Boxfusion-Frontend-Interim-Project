@@ -40,7 +40,7 @@ function addNewUser() {
         .catch(err => console.error("Error hashing password", err));
 }
 
-// Hide the add user form
+// Hide the add user div
 function closeAddUser() {
     document.getElementById("addUser").style.display = "none";
 }
@@ -58,10 +58,10 @@ function renderUserList() {
             div.className = 'user';
             div.innerHTML = `
                 <div>
-                    <div>${u.Username}</div>
+                    <a href="#" class="chat-open" title="chat ${u.username}"><div>${u.Username}</div></a>
                     <small class="status">${getActiveUser().includes(u.Username) ? "online" : "offline"}</small>
                 </div>
-                <a href="#" class="chat-open" title="Chat with ${u.Username}">
+                <a href="#" class="" title="">
                   <i class="fa-solid fa-ellipsis-vertical"></i>
                 </a>
             `;
@@ -148,7 +148,7 @@ function openChatPopup(username) {
         history.forEach(msg => {
             const msgEl = document.createElement("div");
             msgEl.className = msg.sender === localStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
-            msgEl.textContent = `${msg.sender}: ${msg.message}`;
+            msgEl.textContent = `${msg.sender} : ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
             chatHistory.appendChild(msgEl);
         });
         chatHistory.scrollTop = chatHistory.scrollHeight; // scroll to bottom
@@ -191,7 +191,7 @@ function refreshChat(username) {
         messages.forEach(msg => {
             const msgEl = document.createElement("div");
             msgEl.className = msg.sender === localStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
-            msgEl.textContent = `${msg.sender}: ${msg.message}`;
+            msgEl.textContent = `${msg.sender} : ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
             chatHistory.appendChild(msgEl);
         });
         chatHistory.scrollTop = chatHistory.scrollHeight;
