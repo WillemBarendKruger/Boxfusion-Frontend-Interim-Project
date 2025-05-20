@@ -17,7 +17,7 @@ function loginUser(){
                     // set the current logged in user
                     localStorage.setItem('currentUser', username);
                     // update the last activetime of user
-                    let userActive = JSON.parse(localStorage.getItem("user_active")) || {};
+                    let userActive = JSON.parse(localStorage.getItem("user_Active")) || {};
                     userActive[username] = Date.now();
                     
                     window.location.href = "../index.html";

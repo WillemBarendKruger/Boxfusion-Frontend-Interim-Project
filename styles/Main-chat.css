@@ -10,6 +10,18 @@ body {
     color: whitesmoke;
 }
 
+a{
+  text-decoration: none;
+  color: rgb(255, 165, 0);
+}
+
+a:hover{
+  color: whitesmoke;
+  font-weight: 600;
+  transform: scale(1.5);
+  transition: 0.3s ease;
+}
+
 .container {
     display: flex;
     height: 100vh;
@@ -136,6 +148,49 @@ body {
   border: 3px solid rgb(255, 165, 0);
   transition: 0.4s ease;
 }
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-message-sent {
+    background-color: rgb(98, 98, 3);
+    align-self: flex-end;
+    border-radius: 10px 0 10px 10px;
+    padding: 10px;
+    margin: 5px 0;
+    max-width: 70%;
+}
+
+.chat-message-received {
+    background-color: whitesmoke;
+    color: black;
+    align-self: flex-start;
+    border-radius: 0 10px 10px 10px;
+    padding: 10px;
+    margin: 5px 0;
+    max-width: 70%;
+}
+
+.chat-messages div {
+    padding: 10px;
+    margin: 4px 0;
+    border-radius: 5px;
+  }
+/* 
+  .chat-messages div:nth-child(odd) {
+    background-color: #e1f5fe;
+    width: fit-content;
+  }
+
+  .chat-messages div:nth-child(even) {
+    background-color: #80986f;
+    float: right;
+  } */
 
 .send-btn {
   background: none;
