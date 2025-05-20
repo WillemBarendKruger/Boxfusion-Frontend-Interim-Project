@@ -137,6 +137,26 @@ body {
   transition: 0.4s ease;
 }
 
+.chat-messages{
+      color: black;
+}
+
+.chat-messages div {
+    padding: 10px;
+    margin: 4px 0;
+    border-radius: 5px;
+  }
+
+  .chat-messages div:nth-child(odd) {
+    background-color: #e1f5fe;
+    width: fit-content;
+  }
+
+  .chat-messages div:nth-child(even) {
+    background-color: #80986f;
+    float: right;
+  }
+
 .send-btn {
   background: none;
   border: none;

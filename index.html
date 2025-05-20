@@ -32,30 +32,24 @@
       </header>
 
       <section class="user-list">
-        <div class="user">
-          <div>
-            <div>UserName</div>
-            <small class="status">available</small>
-          </div>
-          <span class="gear-icon"><i class="fa-solid fa-ellipsis-vertical"></i></span>
-        </div>
+        
       </section>
     </main>
 
     <!-- Chat Window -->
-    <section class="chat-window">
+    <section id="chatPopup" class="chat-window" data-chat-with="">
       <div class="chat-header">
         <div>UserName</div>
         <small class="status">available</small>
       </div>
 
-      <div class="chat-messages">
-        
-      </div>
+      <div id="chatHistory" class="chat-messages" style="height: 400px; overflow-y: auto; margin-bottom: 10px;"></div>
+
 
       <div class="chat-input">
-        <input type="text" placeholder="Message..." />
-        <button class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+        <input id="chatInput" type="text" placeholder="Message..." />
+        <button id="send-btn" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+
       </div>
     </section>
   </div>
