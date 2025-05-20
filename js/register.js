@@ -1,21 +1,14 @@
-// register user example
-// var users = JSON.parse(localStorage.getItem('Users')) || [];
-// var userData = [{Username:document.getElementById("UserName").value},
-// {Password:document.getElementById("PassWord").value}];
-
-// users.push(userData);
-// localStorage.setItem('Users', JSON.stringify(users));
-
 // register a user
 function registerUser() {
-    let username = document.getElementById("userName").value;
-    let password = document.getElementById("passWord").value;
+    const username = document.getElementById("userName").value;
+    const password = document.getElementById("passWord").value;
 
     // Check if the username already exists
-    let users = JSON.parse(localStorage.getItem('Users')) || [];
+    const users = JSON.parse(localStorage.getItem('users')) || [];
     for (let i = 0; i < users.length; i++) {
         if (users[i].Username === username) {
             alert("Username already exists. Please choose a different one.");
+            window.location.href = "./register.html";
             return;
         }
     }
@@ -30,7 +23,7 @@ function registerUser() {
             // Store the user data in local storage
             let userData = { Username: username, Password: hashHex };
             users.push(userData);
-            localStorage.setItem('Users', JSON.stringify(users));
+            localStorage.setItem('users', JSON.stringify(users));
             alert("User registered successfully!");
             window.location.href = "./login.html";
         })
