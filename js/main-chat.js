@@ -140,6 +140,7 @@ function openChatPopup(username) {
 
     // Update chat header username
     chatPopup.querySelector(".chat-header > div").textContent = username;
+    document.getElementById("status").textContent = getActiveUser().includes(username) ? "online" : "offline";
 
     // Load chat messages
     function populateChat() {
@@ -151,12 +152,11 @@ function openChatPopup(username) {
             msgEl.textContent = `${msg.sender} : ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
             chatHistory.appendChild(msgEl);
         });
-        chatHistory.scrollTop = chatHistory.scrollHeight; // scroll to bottom
+        chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
     populateChat();
 
-    // Remove old event to prevent stacking
     sendBtn.onclick = null;
 
     sendBtn.onclick = () => {
@@ -170,7 +170,7 @@ function openChatPopup(username) {
 }
 
 
-// Handle storage event for live chat
+// storage event for live chat
 window.addEventListener("storage", function (event) {
     if (event.key && event.key.startsWith("chat_")) {
         const chatPopup = document.getElementById("chatPopup");
