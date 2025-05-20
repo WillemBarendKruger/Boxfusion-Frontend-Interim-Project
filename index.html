@@ -18,7 +18,7 @@
       <h3>Settings</h3>
       <div class="menu">
         <button class="menu-btn">Update Username</button>
-        <button class="menu-btn">Add User</button>
+        <button class="menu-btn" onclick="addUser()">Add User</button>
         <button class="menu-btn">Create new group</button>
         <button class="menu-btn" onclick="logOut()">Log Out</button>
       </div>
@@ -59,6 +59,16 @@
       </div>
     </section>
   </div>
+  <!-- Page to add new user -->
+   <div id="addUser" class="modal">
+  <div>
+    <h3 style="margin-bottom: 10px;">Add New User</h3>
+    <input type="text" id="newUsername" placeholder="Enter username" />
+    <input type="password" id="newPassword" placeholder="Enter password" />
+    <button onclick="addNewUser()">Add</button>
+    <button onclick="closeAddUser()">Cancel</button>
+  </div>
+</div>
   <script src="./js/main-chat.js"></script>
 </body>
 </html>
