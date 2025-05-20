@@ -14,8 +14,12 @@ function loginUser(){
             for (let i = 0; i < users.length; i++) {
                 if (users[i].Username === username && users[i].Password === hashHex) {
                     alert("Login successful!");
+                    // set the current logged in user
                     localStorage.setItem('currentUser', username);
-                    console.log(username)
+                    // update the last activetime of user
+                    let userActive = JSON.parse(localStorage.getItem("user_active")) || {};
+                    userActive[username] = Date.now();
+                    
                     window.location.href = "../index.html";
                     return;
                 }

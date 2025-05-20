@@ -1,7 +1,3 @@
-
-//NOTES
-// This JavaScript function, checkUserActivity() , checks the time difference between the current time and the last active time. If the time difference is greater than 30 seconds (indicating inactivity), it sets user_active to false and logs "User is inactive" to the console.
-
 // Show sidebar
 function showSidebar() {
     let sidebar = document.getElementById("sidebar");
@@ -57,6 +53,81 @@ window.addEventListener("storage", function (event) {
         refreshChat();
     }
 })
+
+function addUser(){
+    document.getElementById("addUser").style.display = "flex";
+}
+
+function addNewUser(){
+    const username = document.getElementById("newUsername").value.trim();
+    const password = document.getElementById("newPassword").value;
+
+    if(!username || !password){
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    if(users.some(user => user.Username === username)){
+        alert("Username already exists. Please choose a different one.");
+        return;
+    }
+
+    // Hash password
+    window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
+        .then(hashed => {
+            const hashArray = Array.from(new Uint8Array(hashed));
+            const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
+            users.push({ Username: username, Password: hashHex, user_Active: Date.now() });
+            localStorage.setItem("users", JSON.stringify(users));
+            alert("User added successfully.");
+            renderUserList();
+            closeAddUser();
+        })
+        .catch(err => console.error("Error hashing password", err));
+}
+
+function closeAddUser(){
+    document.getElementById("addUser").style.display = "none";
+}
+
+// refresh user list
+function renderUserList() {
+    const userListEl = document.querySelector('.user-list');
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const current = localStorage.getItem("currentUser");
+
+    userListEl.innerHTML = '';
+    users.forEach(u => {
+        if (u.Username !== current) {
+            const div = document.createElement('div');
+            div.className = 'user';
+            div.innerHTML = `
+                <div>
+                    <div>${u.Username}</div>
+                    <small class="status">${getActiveUser().includes(u.Username) ? "online" : "offline"}</small>
+                </div>
+                <span class="gear-icon"><i class="fa-solid fa-ellipsis-vertical"></i></span>
+            `;
+            div.addEventListener('click', () => {
+                loadChat(u.Username);
+            });
+            userListEl.appendChild(div);
+        }
+    });
+}
+window.onload = function() {
+    renderUserList();
+    const currentUser = localStorage.getItem('currentUser');
+    markAsActive(currentUser);
+    setInterval(() => {
+        markAsActive(currentUser);
+        renderUserList();
+    }, 300000); // every 5 minutes
+}
+
+
 // logout user
 function logOut() {
     localStorage.removeItem('lastActiveTime');
