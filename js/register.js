@@ -18,7 +18,6 @@ function registerUser() {
         .then(function (hashedPassword) {
             let hashArray = Array.from(new Uint8Array(hashedPassword));
             let hashHex = hashArray.map(passw => ('00' + passw.toString(16)).slice(-2)).join('');
-            console.log("Hashed Password: " + hashHex);
 
             // Store the user data in local storage
             let userData = { Username: username, Password: hashHex, user_Active: Date.now() };

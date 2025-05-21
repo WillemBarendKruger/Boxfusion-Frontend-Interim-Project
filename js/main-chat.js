@@ -46,7 +46,7 @@ function closeAddUser() {
 function renderUserList() {
     const userListEl = document.querySelector('.user-list');
     const users = JSON.parse(localStorage.getItem("users")) || [];
-    const current = localStorage.getItem("currentUser");
+    const current = sessionStorage.getItem("currentUser");
     const groups = JSON.parse(localStorage.getItem("groups")) || [];
 
     userListEl.innerHTML = '';
@@ -74,7 +74,7 @@ function renderUserList() {
         div.className = 'user group';
         div.innerHTML = `
             <div>
-                <a href="#" class="chat-open-group">${group.name} (Group)</a>
+                <a href="#" class="chat-open-group">${group.name} (Group)<i class="fa-solid fa-ellipsis-vertical"></i></a>
             </div>
         `;
         div.querySelector('.chat-open-group').addEventListener('click', (e) => {
@@ -89,7 +89,7 @@ function renderUserList() {
 // Initial page load
 window.onload = function () {
     renderUserList();
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = sessionStorage.getItem('currentUser');
     markAsActive(currentUser);
     setInterval(() => {
         markAsActive(currentUser);
@@ -118,7 +118,7 @@ function getChatKey(user1, user2) {
 }
 
 function sendMessage(toUser, messageText) {
-    const fromUser = localStorage.getItem('currentUser');
+    const fromUser = sessionStorage.getItem('currentUser');
     const chatKey = getChatKey(fromUser, toUser);
     const chatMessages = JSON.parse(localStorage.getItem(chatKey)) || [];
     chatMessages.push({ sender: fromUser, message: messageText, timestamp: Date.now() });
@@ -127,7 +127,7 @@ function sendMessage(toUser, messageText) {
 }
 
 function loadChatHistory(withUser) {
-    const fromUser = localStorage.getItem('currentUser');
+    const fromUser = sessionStorage.getItem('currentUser');
     const chatKey = getChatKey(fromUser, withUser);
     return JSON.parse(localStorage.getItem(chatKey)) || [];
 }
@@ -143,14 +143,14 @@ function openChatPopup(username) {
     chatPopup.removeAttribute("data-group");
 
     chatPopup.querySelector(".chat-header > div").textContent = username;
-    document.getElementById("status").textContent = getActiveUser().includes(Username) ? "online" : "offline";
+    document.getElementById("status").textContent = getActiveUser().includes(username) ? "online" : "offline";
 
     function populateChat() {
         chatHistory.innerHTML = "";
         const history = loadChatHistory(username);
         history.forEach(msg => {
             const msgEl = document.createElement("div");
-            msgEl.className = msg.sender === localStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
+            msgEl.className = msg.sender === sessionStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
             msgEl.textContent = `${msg.sender}: ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
             chatHistory.appendChild(msgEl);
         });
@@ -177,7 +177,7 @@ function openGroupPopup() {
     groupUsers.innerHTML = "";
 
     const users = JSON.parse(localStorage.getItem("users")) || [];
-    const currentUser = localStorage.getItem("currentUser");
+    const currentUser = sessionStorage.getItem("currentUser");
 
     users.forEach(user => {
         if (user.Username !== currentUser) {
@@ -194,7 +194,7 @@ function openGroupPopup() {
 
 function createGroupChat() {
   const groupName = document.getElementById("groupName").value.trim();
-  const selectedUsers = Array.from(document.querySelectorAll('input[name="groupUsers"]:checked')).map(cb => cb.value);
+  const selectedUsers = Array.from(document.querySelectorAll('input[name="groupUsers"]:checked')).map(ceckb => ceckb.value);
 
   if (!groupName || selectedUsers.length === 0) {
     alert("Please provide a group name and select at least one user.");
@@ -220,8 +220,8 @@ function createGroupChat() {
 function createGroupChat() {
     const groupName = document.getElementById("groupName").value.trim();
     const checkboxes = document.querySelectorAll(".group-user-checkbox:checked");
-    const selectedUsers = Array.from(checkboxes).map(cb => cb.value);
-    const currentUser = localStorage.getItem("currentUser");
+    const selectedUsers = Array.from(checkboxes).map(ceckb => ceckb.value);
+    const currentUser = sessionStorage.getItem("currentUser");
 
     if (!groupName) {
         alert("Group name is required.");
@@ -240,7 +240,7 @@ function createGroupChat() {
 
     let groups = JSON.parse(localStorage.getItem("groups")) || [];
 
-    if (groups.some(g => g.name === groupName)) {
+    if (groups.some(group => group.name === groupName)) {
         alert("A group with that name already exists.");
         return;
     }
@@ -271,7 +271,7 @@ function openGroupChat(groupName) {
         const history = JSON.parse(localStorage.getItem("group_" + groupName)) || [];
         history.forEach(msg => {
             const msgEl = document.createElement("div");
-            msgEl.className = msg.sender === localStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
+            msgEl.className = msg.sender === sessionStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
             msgEl.textContent = `${msg.sender}: ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
             chatHistory.appendChild(msgEl);
         });
@@ -285,7 +285,7 @@ function openGroupChat(groupName) {
         const text = chatInput.value.trim();
         if (text) {
             const groupMessages = JSON.parse(localStorage.getItem("group_" + groupName)) || [];
-            groupMessages.push({ sender: localStorage.getItem("currentUser"), message: text, timestamp: Date.now() });
+            groupMessages.push({ sender: sessionStorage.getItem("currentUser"), message: text, timestamp: Date.now() });
             localStorage.setItem("group_" + groupName, JSON.stringify(groupMessages));
             chatInput.value = "";
             populateChat();
@@ -320,7 +320,7 @@ function refreshChat(username) {
         chatHistory.innerHTML = "";
         messages.forEach(msg => {
             const msgEl = document.createElement("div");
-            msgEl.className = msg.sender === localStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
+            msgEl.className = msg.sender === sessionStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
             msgEl.textContent = `${msg.sender}: ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
             chatHistory.appendChild(msgEl);
         });

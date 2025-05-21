@@ -15,7 +15,7 @@ function loginUser(){
                 if (users[i].Username === username && users[i].Password === hashHex) {
                     alert("Login successful!");
                     // set the current logged in user
-                    localStorage.setItem('currentUser', username);
+                    sessionStorage.setItem('currentUser', username);
                     // update the last activetime of user
                     let userActive = JSON.parse(localStorage.getItem("user_Active")) || {};
                     userActive[username] = Date.now();
