@@ -181,16 +181,6 @@ a:hover{
     margin: 4px 0;
     border-radius: 5px;
   }
-/* 
-  .chat-messages div:nth-child(odd) {
-    background-color: #e1f5fe;
-    width: fit-content;
-  }
-
-  .chat-messages div:nth-child(even) {
-    background-color: #80986f;
-    float: right;
-  } */
 
 .send-btn {
   background: none;
@@ -221,6 +211,22 @@ a:hover{
   min-width: 300px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
   z-index: 2000;
+}
+
+#groupUsers {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
 }
 
 .modal input {
