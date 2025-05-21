@@ -11,7 +11,7 @@ function addUser() {
 }
 
 function addNewUser() {
-    const username = document.getElementById("newUsername").value.trim();
+    const username = document.getElementById("newUsername").value.toUpperCase().trim();
     const password = document.getElementById("newPassword").value;
 
     if (!username || !password) {
