@@ -1,208 +1,3 @@
-// // Show sidebar
-// function showSidebar() {
-//     let sidebar = document.getElementById("sidebar");
-//     sidebar.style.display = (sidebar.style.display === "none" || sidebar.style.display === "") ? "block" : "none";
-// }
-
-// function addUser() {
-//     document.getElementById("addUser").style.display = "flex";
-// }
-
-// function addNewUser() {
-//     const username = document.getElementById("newUsername").value.trim();
-//     const password = document.getElementById("newPassword").value;
-
-//     if (!username || !password) {
-//         alert("Please fill in all fields.");
-//         return;
-//     }
-
-//     let users = JSON.parse(localStorage.getItem('users')) || [];
-
-//     if (users.some(user => user.Username === username)) {
-//         alert("Username already exists. Please choose a different one.");
-//         return;
-//     }
-
-//     // Hash password
-//     window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
-//         .then(hashed => {
-//             const hashArray = Array.from(new Uint8Array(hashed));
-//             const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
-//             users.push({ Username: username, Password: hashHex, user_Active: Date.now() });
-//             localStorage.setItem("users", JSON.stringify(users));
-//             alert("User added successfully.");
-//             renderUserList();
-//             closeAddUser();
-//         })
-//         .catch(err => console.error("Error hashing password", err));
-// }
-
-// function closeAddUser() {
-//     document.getElementById("addUser").style.display = "none";
-// }
-
-// function renderUserList() {
-//     const userListEl = document.querySelector('.user-list');
-//     const users = JSON.parse(localStorage.getItem("users")) || [];
-//     const current = localStorage.getItem("currentUser");
-
-//     userListEl.innerHTML = '';
-//     users.forEach(user => {
-//         if (user.Username !== current) {
-//             const div = document.createElement('div');
-//             div.className = 'user';
-//             div.innerHTML = `
-//                 <div>
-//                     <a href="#" class="chat-open" title="chat ${user.username}"><div>${user.Username}</div></a>
-//                     <small class="status">${getActiveUser().includes(user.Username) ? "online" : "offline"}</small>
-//                 </div>
-//                 <a href="#" class="" title="">
-//                   <i class="fa-solid fa-ellipsis-vertical"></i>
-//                 </a>
-//             `;
-
-//             div.querySelector('a.chat-open').addEventListener('click', (event) => {
-//                 event.preventDefault(); 
-//                 openChatPopup(user.Username);
-//             });
-
-//             userListEl.appendChild(div);
-//         }
-//     });
-// }
-
-// // Create a group chat
-
-
-
-// // Initial page load
-// window.onload = function () {
-//     renderUserList();
-//     const currentUser = localStorage.getItem('currentUser');
-//     markAsActive(currentUser);
-//     setInterval(() => {
-//         markAsActive(currentUser);
-//         renderUserList();
-//     }, 300000); // every 5 minutes
-//     document.getElementById("username").innerHTML = currentUser;
-// }
-
-// // Mark user as active
-// function markAsActive(username) {
-//     const activeUser = JSON.parse(localStorage.getItem('user_Active')) || {};
-//     activeUser[username] = Date.now();
-//     localStorage.setItem('user_Active', JSON.stringify(activeUser));
-// }
-
-// // Get list of users active in the last 5 minutes
-// function getActiveUser() {
-//     const activeUsers = JSON.parse(localStorage.getItem('user_Active')) || {};
-//     const now = Date.now();
-//     const fiveMinutes = 5 * 60 * 1000;
-//     return Object.keys(activeUsers).filter(user => now - activeUsers[user] < fiveMinutes);
-// }
-
-// // Generate chat key
-// function getChatKey(user1, user2) {
-//     return 'chat_' + [user1, user2].sort().join('_');
-// }
-
-// // Save message
-// function sendMessage(toUser, messageText) {
-//     const fromUser = localStorage.getItem('currentUser');
-//     const chatKey = getChatKey(fromUser, toUser);
-//     const chatMessages = JSON.parse(localStorage.getItem(chatKey)) || [];
-//     chatMessages.push({ sender: fromUser, message: messageText, timestamp: Date.now() });
-//     localStorage.setItem(chatKey, JSON.stringify(chatMessages));
-//     refreshChat(toUser);
-// }
-
-
-// // Load chat history
-// function loadChatHistory(withUser) {
-//     const fromUser = localStorage.getItem('currentUser');
-//     const chatKey = getChatKey(fromUser, withUser);
-//     return JSON.parse(localStorage.getItem(chatKey)) || [];
-// }
-
-// // Open chat popup with a specific user
-// function openChatPopup(username) {
-//     const chatPopup = document.getElementById("chatPopup");
-//     const chatHistory = document.getElementById("chatHistory");
-//     const chatInput = document.getElementById("chatInput");
-//     const sendBtn = document.getElementById("send-btn");
-
-//     chatPopup.style.display = "flex";
-//     chatPopup.setAttribute("data-chat-with", username);
-
-//     // Update chat header username
-//     chatPopup.querySelector(".chat-header > div").textContent = username;
-//     document.getElementById("status").textContent = getActiveUser().includes(username) ? "online" : "offline";
-
-//     // Load chat messages
-//     function populateChat() {
-//         chatHistory.innerHTML = "";
-//         const history = loadChatHistory(username);
-//         history.forEach(msg => {
-//             const msgEl = document.createElement("div");
-//             msgEl.className = msg.sender === localStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
-//             msgEl.textContent = `${msg.sender} : ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
-//             chatHistory.appendChild(msgEl);
-//         });
-//         chatHistory.scrollTop = chatHistory.scrollHeight;
-//     }
-
-//     populateChat();
-
-//     sendBtn.onclick = null;
-
-//     sendBtn.onclick = () => {
-//         const text = chatInput.value.trim();
-//         if (text) {
-//             sendMessage(username, text);
-//             chatInput.value = "";
-//             populateChat();
-//         }
-//     };
-// }
-
-
-// // storage event for live chat
-// window.addEventListener("storage", function (event) {
-//     if (event.key && event.key.startsWith("chat_")) {
-//         const chatPopup = document.getElementById("chatPopup");
-//         if (chatPopup && chatPopup.style.display === "flex") {
-//             const username = chatPopup.getAttribute("data-chat-with");
-//             refreshChat(username);
-//         }
-//     }
-// });
-
-// // Refresh chat
-// function refreshChat(username) {
-//     const chatPopup = document.getElementById("chatPopup");
-//     if (chatPopup && chatPopup.style.display === "flex" && chatPopup.getAttribute("data-chat-with") === username) {
-//         const chatHistory = document.getElementById("chatHistory");
-//         const messages = loadChatHistory(username);
-//         chatHistory.innerHTML = "";
-//         messages.forEach(msg => {
-//             const msgEl = document.createElement("div");
-//             msgEl.className = msg.sender === localStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
-//             msgEl.textContent = `${msg.sender} : ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
-//             chatHistory.appendChild(msgEl);
-//         });
-//         chatHistory.scrollTop = chatHistory.scrollHeight;
-//     }
-// }
-
-// // Logout function
-// function logOut() {
-//     localStorage.removeItem('user_Active');
-//     alert("You have been logged out.");
-//     window.location.href = "./pages/login.html";
-// }
-
 // Show sidebar
 function showSidebar() {
     let sidebar = document.getElementById("sidebar");
@@ -250,52 +45,44 @@ function renderUserList() {
     const userListEl = document.querySelector('.user-list');
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const current = localStorage.getItem("currentUser");
+    const groups = JSON.parse(localStorage.getItem("groups")) || [];
 
     userListEl.innerHTML = '';
 
-    // Render individual users
     users.forEach(user => {
         if (user.Username !== current) {
             const div = document.createElement('div');
             div.className = 'user';
             div.innerHTML = `
                 <div>
-                    <a href="#" class="chat-open" title="chat ${user.Username}"><div>${user.Username}</div></a>
+                    <a href="#" class="chat-open">${user.Username}</a>
                     <small class="status">${getActiveUser().includes(user.Username) ? "online" : "offline"}</small>
                 </div>
-                <a href="#" class="" title="">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                </a>
             `;
-
-            div.querySelector('a.chat-open').addEventListener('click', (event) => {
+            div.querySelector('.chat-open').addEventListener('click', (event) => {
                 event.preventDefault();
                 openChatPopup(user.Username);
             });
-
             userListEl.appendChild(div);
         }
     });
 
-    // Render group chats
-    const groups = JSON.parse(localStorage.getItem("groups")) || [];
     groups.forEach(group => {
         const div = document.createElement('div');
         div.className = 'user group';
         div.innerHTML = `
             <div>
-                <a href="#" class="chat-open-group" title="Group Chat: ${group.name}">
-                    <div>${group.name} (Group)</div>
-                </a>
+                <a href="#" class="chat-open-group">${group.name} (Group)</a>
             </div>
         `;
-        div.querySelector('.chat-open-group').addEventListener('click', (event) => {
-            event.preventDefault();
+        div.querySelector('.chat-open-group').addEventListener('click', (e) => {
+            e.preventDefault();
             openGroupChat(group.name);
         });
         userListEl.appendChild(div);
     });
 }
+
 
 // Initial page load
 window.onload = function () {
@@ -305,7 +92,8 @@ window.onload = function () {
     setInterval(() => {
         markAsActive(currentUser);
         renderUserList();
-    }, 300000);
+    }, 600000);
+    // chaning to 10 for testing
     document.getElementById("username").innerHTML = currentUser;
 }
 
@@ -318,7 +106,8 @@ function markAsActive(username) {
 function getActiveUser() {
     const activeUsers = JSON.parse(localStorage.getItem('user_Active')) || {};
     const now = Date.now();
-    const fiveMinutes = 5 * 60 * 1000;
+    // Note changing to 10 for testing
+    const fiveMinutes = 10 * 60 * 1000;
     return Object.keys(activeUsers).filter(user => now - activeUsers[user] < fiveMinutes);
 }
 
@@ -352,7 +141,7 @@ function openChatPopup(username) {
     chatPopup.removeAttribute("data-group");
 
     chatPopup.querySelector(".chat-header > div").textContent = username;
-    document.getElementById("status").textContent = getActiveUser().includes(username) ? "online" : "offline";
+    document.getElementById("status").textContent = getActiveUser().includes(Username) ? "online" : "offline";
 
     function populateChat() {
         chatHistory.innerHTML = "";
@@ -379,39 +168,27 @@ function openChatPopup(username) {
     };
 }
 
-// GROUP CHAT FUNCTIONS
 function openGroupPopup() {
-  const modal = document.getElementById("groupPopup");
-  const groupUsersContainer = document.getElementById("groupUsers");
+    const groupPopup = document.getElementById("groupPopup");
+    const groupUsers = document.getElementById("groupUsers");
+    groupPopup.style.display = "block";
+    groupUsers.innerHTML = "";
 
-  // Clear any previously rendered checkboxes
-  groupUsersContainer.innerHTML = "";
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const currentUser = localStorage.getItem("currentUser");
 
-  // Get all users from localStorage
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-
-  // Get the current logged-in user (to exclude from list if needed)
-  const currentUser = localStorage.getItem("currentUser");
-
-  // Create checkboxes for each user
-  users.forEach(user => {
-    if (user.username !== currentUser) { // Optional: exclude current user
-      const label = document.createElement("label");
-      label.style.display = "block";
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = user.username;
-      checkbox.name = "groupUsers";
-
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(" " + user.username));
-      groupUsersContainer.appendChild(label);
-    }
-  });
-
-  modal.style.display = "block";
+    users.forEach(user => {
+        if (user.Username !== currentUser) {
+            const label = document.createElement("label");
+            label.className = "checkbox-label";
+            label.innerHTML = `
+                <input type="checkbox" value="${user.Username}" class="group-user-checkbox">
+                ${user.Username}
+            `;
+            groupUsers.appendChild(label);
+        }
+    });
 }
-
 
 function createGroupChat() {
   const groupName = document.getElementById("groupName").value.trim();
@@ -440,24 +217,39 @@ function createGroupChat() {
 
 function createGroupChat() {
     const groupName = document.getElementById("groupName").value.trim();
+    const checkboxes = document.querySelectorAll(".group-user-checkbox:checked");
+    const selectedUsers = Array.from(checkboxes).map(cb => cb.value);
+    const currentUser = localStorage.getItem("currentUser");
+
     if (!groupName) {
-        alert("Group name cannot be empty.");
+        alert("Group name is required.");
         return;
     }
+
+    if (selectedUsers.length === 0) {
+        alert("Select at least one user to create a group.");
+        return;
+    }
+
+    const newGroup = {
+        name: groupName,
+        members: [currentUser, ...selectedUsers]
+    };
 
     let groups = JSON.parse(localStorage.getItem("groups")) || [];
-    if (groups.some(group => group.name === groupName)) {
-        alert("Group name already exists.");
+
+    if (groups.some(g => g.name === groupName)) {
+        alert("A group with that name already exists.");
         return;
     }
 
-    const currentUser = localStorage.getItem("currentUser");
-    groups.push({ name: groupName, members: [currentUser] });
+    groups.push(newGroup);
     localStorage.setItem("groups", JSON.stringify(groups));
-    alert("Group created successfully.");
-    renderUserList();
     closeGroupPopup();
+    renderUserList();
+    alert("Group created successfully!");
 }
+
 
 function openGroupChat(groupName) {
     const chatPopup = document.getElementById("chatPopup");
@@ -497,6 +289,11 @@ function openGroupChat(groupName) {
             populateChat();
         }
     };
+}
+
+function closeGroupPopup() {
+    document.getElementById("groupPopup").style.display = "none";
+    document.getElementById("groupName").value = "";
 }
 
 // Storage event listener for live updates
