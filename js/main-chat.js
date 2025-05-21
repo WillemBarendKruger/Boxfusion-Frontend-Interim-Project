@@ -4,6 +4,8 @@ function showSidebar() {
     sidebar.style.display = (sidebar.style.display === "none" || sidebar.style.display === "") ? "block" : "none";
 }
 
+// change username
+
 function addUser() {
     document.getElementById("addUser").style.display = "flex";
 }

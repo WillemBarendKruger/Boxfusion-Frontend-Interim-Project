@@ -1,6 +1,5 @@
-// register a user
 function registerUser() {
-    const username = document.getElementById("userName").value;
+    const username = document.getElementById("userName").value.toUpperCase().trim();
     const password = document.getElementById("passWord").value;
 
     // Check if the username already exists
@@ -8,7 +7,8 @@ function registerUser() {
     for (let i = 0; i < users.length; i++) {
         if (users[i].Username === username) {
             alert("Username already exists. Please choose a different one.");
-            window.location.href = "./register.html";
+            // override default action of the form
+            
             return;
         }
     }
@@ -17,7 +17,7 @@ function registerUser() {
     window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
         .then(function (hashedPassword) {
             let hashArray = Array.from(new Uint8Array(hashedPassword));
-            let hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
+            let hashHex = hashArray.map(passw => ('00' + passw.toString(16)).slice(-2)).join('');
             console.log("Hashed Password: " + hashHex);
 
             // Store the user data in local storage
