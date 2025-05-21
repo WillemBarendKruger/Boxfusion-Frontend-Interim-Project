@@ -94,8 +94,7 @@ window.onload = function () {
     setInterval(() => {
         markAsActive(currentUser);
         renderUserList();
-    }, 600000);
-    // chaning to 10 for testing
+    }, 300000);
     document.getElementById("username").innerHTML = currentUser;
 }
 
@@ -108,8 +107,7 @@ function markAsActive(username) {
 function getActiveUser() {
     const activeUsers = JSON.parse(localStorage.getItem('user_Active')) || {};
     const now = Date.now();
-    // Note changing to 10 for testing
-    const fiveMinutes = 10 * 60 * 1000;
+    const fiveMinutes = 5 * 60 * 1000;
     return Object.keys(activeUsers).filter(user => now - activeUsers[user] < fiveMinutes);
 }
 
@@ -171,7 +169,7 @@ function openChatPopup(username) {
         }
     };
 
-    // event listener for typing status
+    // event handler for typing status
     chatInput.oninput = () => {
     const fromUser = sessionStorage.getItem('currentUser');
     const typingKey = `typing_status_${fromUser}_${username}`;
@@ -195,7 +193,8 @@ function openChatPopup(username) {
         }
     }
 
-    clearInterval(typingInterval); // prevent multiple intervals
+     // prevent multiple intervals
+    clearInterval(typingInterval);
     typingInterval = setInterval(checkTyping, 1000);
 
 }
@@ -340,9 +339,6 @@ window.addEventListener("storage", function (event) {
         }
     }
 });
-
-// show live typing cross session with live update
-
 
 
 // Refresh one-to-one chat
