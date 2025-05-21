@@ -10,6 +10,10 @@ body {
     color: whitesmoke;
 }
 
+h3{
+  margin-bottom: 10px;
+}
+
 a{
   text-decoration: none;
   color: rgb(255, 165, 0);
@@ -116,6 +120,12 @@ a:hover{
     flex-grow: 1;
     background-color: darkgrey;
     flex-direction: column;
+}
+
+div#chatHistory{
+  background-color: rgb(108, 102, 83);
+  margin: 10px;
+  border-radius: 10px;
 }
 
 .chat-header {
