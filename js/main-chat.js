@@ -162,12 +162,42 @@ function openChatPopup(username) {
     sendBtn.onclick = null;
     sendBtn.onclick = () => {
         const text = chatInput.value.trim();
+        localStorage.removeItem(`typing_status_${sessionStorage.getItem('currentUser')}_${username}`);
+
         if (text) {
             sendMessage(username, text);
             chatInput.value = "";
             populateChat();
         }
     };
+
+    // event listener for typing status
+    chatInput.oninput = () => {
+    const fromUser = sessionStorage.getItem('currentUser');
+    const typingKey = `typing_status_${fromUser}_${username}`;
+    localStorage.setItem(typingKey, JSON.stringify({ typing: true, timestamp: Date.now() }));
+    };
+
+    let typingInterval;
+
+    function checkTyping() {
+        const fromUser = sessionStorage.getItem('currentUser');
+        const reverseKey = `typing_status_${username}_${fromUser}`;
+        const status = JSON.parse(localStorage.getItem(reverseKey));
+
+        const indicator = document.getElementById("typing");
+
+        if (status && status.typing && Date.now() - status.timestamp < 1500) {
+            indicator.textContent = `${username} is typing...`;
+            indicator.style.display = "inline";
+        } else {
+            indicator.style.display = "none";
+        }
+    }
+
+    clearInterval(typingInterval); // prevent multiple intervals
+    typingInterval = setInterval(checkTyping, 1000);
+
 }
 
 function openGroupPopup() {
@@ -310,6 +340,10 @@ window.addEventListener("storage", function (event) {
         }
     }
 });
+
+// show live typing cross session with live update
+
+
 
 // Refresh one-to-one chat
 function refreshChat(username) {
