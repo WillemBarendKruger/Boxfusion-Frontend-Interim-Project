@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link for icons -->
+    <script src="https://kit.fontawesome.com/0746f1ba48.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../styles/Main-chat.css">
+    <title>Chat Application</title>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <h3>Settings</h3>
+      <div class="menu">
+        <button class="menu-btn">Update Username</button>
+        <button class="menu-btn" onclick="addUser()">Add User</button>
+        <button class="menu-btn" onclick="openGroupPopup()">Create new group</button> 
+        <button class="menu-btn" onclick="logOut()">Log Out</button>
+      </div>
+    </aside>
+
+    <!-- Chat Application -->
+    <main class="main-chat">
+      <header class="app-header">
+        <button class="gear-icon" onclick="showSidebar()"><i class="fa-solid fa-gear"></i></button>
+        <h2 id="username">UserName</h2>
+      </header>
+      <section class="user-list">
+        <!-- User and Group list will be rendered here -->
+      </section>
+    </main>
+
+    <!-- Chat Window -->
+    <section id="chatPopup" class="chat-window" data-chat-with="">
+      <div class="chat-header">
+        <div></div>
+        <small class="status" id="status"></small>
+      </div>
+      <div id="chatHistory" class="chat-messages" style="height: 400px; overflow-y: auto; margin-bottom: 10px;"></div>
+      <!-- display live typing -->
+      <div id="typing" class="typing">
+        <small><i class="fa-solid fa-user"></i> is typing...</small>
+      </div>
+      <div class="chat-input">
+        <input id="chatInput" type="text" placeholder="Message..." />
+        <button id="send-btn" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Page to add new user -->
+  <div id="addUser" class="modal">
+    <div>
+      <h3 style="margin-bottom: 10px;">Add New User</h3>
+      <input type="text" id="newUsername" placeholder="Enter username" />
+      <input type="password" id="newPassword" placeholder="Enter password" />
+      <button onclick="addNewUser()">Add</button>
+      <button onclick="closeAddUser()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Modal to create new group -->
+  <div id="groupPopup" class="modal">
+    <div>
+      <h3 style="margin-bottom: 10px;">Create New Group</h3>
+      <input type="text" id="groupName" placeholder="Group name" />
+      <div id="groupUsers" ></div>
+      <button onclick="createGroupChat()">Create</button>
+      <button onclick="closeGroupPopup()">Cancel</button>
+    </div>
+  </div>
+
+  <script src="../js/main-chat.js"></script>
+</body>
+</html>

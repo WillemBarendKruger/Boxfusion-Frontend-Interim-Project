@@ -127,8 +127,7 @@ window.onload = function () {
     setInterval(() => {
         markAsActive(currentUser);
         renderUserList();
-    }, 600000);
-    // chaning to 10 for testing
+    }, 300000);
     document.getElementById("username").innerHTML = currentUser;
 }
 
@@ -141,8 +140,7 @@ function markAsActive(username) {
 function getActiveUser() {
     const activeUsers = JSON.parse(localStorage.getItem('user_Active')) || {};
     const now = Date.now();
-    // Note changing to 10 for testing
-    const fiveMinutes = 10 * 60 * 1000;
+    const fiveMinutes = 5 * 60 * 1000;
     return Object.keys(activeUsers).filter(user => now - activeUsers[user] < fiveMinutes);
 }
 
@@ -204,7 +202,7 @@ function openChatPopup(username) {
         }
     };
 
-    // event listener for typing status
+    // event handler for typing status
     chatInput.oninput = () => {
     const fromUser = sessionStorage.getItem('currentUser');
     const typingKey = `typing_status_${fromUser}_${username}`;
@@ -228,7 +226,8 @@ function openChatPopup(username) {
         }
     }
 
-    clearInterval(typingInterval); // prevent multiple intervals
+     // prevent multiple intervals
+    clearInterval(typingInterval);
     typingInterval = setInterval(checkTyping, 1000);
 
 }
@@ -316,6 +315,45 @@ function createGroupChat() {
 }
 
 
+// function openGroupChat(groupName) {
+//     const chatPopup = document.getElementById("chatPopup");
+//     const chatHistory = document.getElementById("chatHistory");
+//     const chatInput = document.getElementById("chatInput");
+//     const sendBtn = document.getElementById("send-btn");
+
+//     chatPopup.style.display = "flex";
+//     chatPopup.setAttribute("data-group", groupName);
+//     chatPopup.removeAttribute("data-chat-with");
+
+//     chatPopup.querySelector(".chat-header > div").textContent = groupName + " (Group)";
+//     document.getElementById("status").textContent = "group chat";
+
+//     function populateChat() {
+//         chatHistory.innerHTML = "";
+//         const history = JSON.parse(localStorage.getItem("group_" + groupName)) || [];
+//         history.forEach(msg => {
+//             const msgEl = document.createElement("div");
+//             msgEl.className = msg.sender === sessionStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
+//             msgEl.textContent = `${msg.sender}: ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
+//             chatHistory.appendChild(msgEl);
+//         });
+//         chatHistory.scrollTop = chatHistory.scrollHeight;
+//     }
+
+//     populateChat();
+
+//     sendBtn.onclick = null;
+//     sendBtn.onclick = () => {
+//         const text = chatInput.value.trim();
+//         if (text) {
+//             const groupMessages = JSON.parse(localStorage.getItem("group_" + groupName)) || [];
+//             groupMessages.push({ sender: sessionStorage.getItem("currentUser"), message: text, timestamp: Date.now() });
+//             localStorage.setItem("group_" + groupName, JSON.stringify(groupMessages));
+//             chatInput.value = "";
+//             populateChat();
+//         }
+//     };
+// }
 function openGroupChat(groupName) {
     const chatPopup = document.getElementById("chatPopup");
     const chatHistory = document.getElementById("chatHistory");
@@ -350,11 +388,49 @@ function openGroupChat(groupName) {
             const groupMessages = JSON.parse(localStorage.getItem("group_" + groupName)) || [];
             groupMessages.push({ sender: sessionStorage.getItem("currentUser"), message: text, timestamp: Date.now() });
             localStorage.setItem("group_" + groupName, JSON.stringify(groupMessages));
-            chatInput.value = "";
+            localStorage.removeItem(`typing_status_group_${groupName}_${sessionStorage.getItem("currentUser")}`);
             populateChat();
+            document.getElementById("typing").style.display = "none";
+            chatInput.value = "";
         }
     };
+
+    // 🟡 Handle typing status on input
+    chatInput.oninput = () => {
+        const currentUser = sessionStorage.getItem("currentUser");
+        const key = `typing_status_group_${groupName}_${currentUser}`;
+        localStorage.setItem(key, JSON.stringify({ typing: true, timestamp: Date.now() }));
+    };
+
+    // 🔁 Check typing status from other users
+    let typingInterval;
+    clearInterval(typingInterval);
+    typingInterval = setInterval(() => {
+        const currentUser = sessionStorage.getItem("currentUser");
+        const group = JSON.parse(localStorage.getItem("groups")).find(g => g.name === groupName);
+        const indicator = document.getElementById("typing");
+
+        let typers = [];
+
+        group.members.forEach(member => {
+            if (member !== currentUser) {
+                const key = `typing_status_group_${groupName}_${member}`;
+                const status = JSON.parse(localStorage.getItem(key));
+                if (status && status.typing && Date.now() - status.timestamp < 1500) {
+                    typers.push(member);
+                }
+            }
+        });
+
+        if (typers.length > 0) {
+            indicator.textContent = typers.join(', ') + " is typing...";
+            indicator.style.display = "inline";
+        } else {
+            indicator.style.display = "none";
+        }
+    }, 1000);
 }
+
 
 function closeGroupPopup() {
     document.getElementById("groupPopup").style.display = "none";
@@ -373,9 +449,6 @@ window.addEventListener("storage", function (event) {
         }
     }
 });
-
-// show live typing cross session with live update
-
 
 
 // Refresh one-to-one chat
@@ -399,5 +472,5 @@ function refreshChat(username) {
 function logOut() {
     localStorage.removeItem('user_Active');
     alert("You have been logged out.");
-    window.location.href = "./pages/login.html";
+    window.location.href = "./login.html";
 }

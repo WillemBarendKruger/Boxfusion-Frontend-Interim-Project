@@ -20,7 +20,7 @@ function loginUser(){
                     let userActive = JSON.parse(localStorage.getItem("user_Active")) || {};
                     userActive[username] = Date.now();
                     
-                    window.location.href = "../index.html";
+                    window.location.href = "./mainchat.html";
                     return;
                 }
                 else{
