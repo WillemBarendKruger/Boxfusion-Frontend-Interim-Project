@@ -192,6 +192,12 @@ div#chatHistory{
     border-radius: 5px;
   }
 
+  .typing{
+    color: rgb(98, 98, 3);
+    display: none; 
+    z-index: 3000;
+  }
+
 .send-btn {
   background: none;
   border: none;
