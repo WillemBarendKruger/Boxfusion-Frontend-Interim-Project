@@ -14,7 +14,7 @@
     <aside class="sidebar" id="sidebar">
       <h3>Settings</h3>
       <div class="menu">
-        <button class="menu-btn">Update Username</button>
+        <button class="menu-btn" onclick="openNewUsername()">Update Username</button>
         <button class="menu-btn" onclick="addUser()">Add User</button>
         <button class="menu-btn" onclick="openGroupPopup()">Create new group</button> 
         <button class="menu-btn" onclick="logOut()">Log Out</button>
@@ -46,10 +46,19 @@
     </section>
   </div>
 
+  <!-- Update username -->
+  <div id="updateUsername" class="modal">
+    <div>
+      <h3>Update Username</h3>
+      <input type="text" id="inputUsername" placeholder="Enter new username" />
+      <button onclick="updatedUsername()">Update</button>
+      <button onclick="closeUpdateUsername()">Cancel</button>
+    </div>
+  </div>
   <!-- Page to add new user -->
   <div id="addUser" class="modal">
     <div>
-      <h3 style="margin-bottom: 10px;">Add New User</h3>
+      <h3>Add New User</h3>
       <input type="text" id="newUsername" placeholder="Enter username" />
       <input type="password" id="newPassword" placeholder="Enter password" />
       <button onclick="addNewUser()">Add</button>
