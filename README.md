@@ -72,28 +72,5 @@ I don't lose my data.
 5. As a user, I want to see timestamps for each message so that I know when each 
 message was sent.
 
-# running application
-## FRONTEND
-
-
-## Development
-
-
-## Production
-
-
-## Docker frontend (if you have environement setup)
-
-
-
-# BACKEND
-
-
-
-# FRONTEND-CI
-
-
-
-# Setup for husky
-
-  
+# Wireframe
+https://www.figma.com/design/PaPdtiSinG2QHMwqoWoZSD/Frontend-Iterm-Prj?node-id=0-1&t=Uoympn0WS4K74SGi-1

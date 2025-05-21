@@ -1,6 +1,6 @@
 // login a user
 function loginUser(){
-    const username = document.getElementById("userName").value;
+    const username = document.getElementById("userName").value.toUpperCase().trim();
     const password = document.getElementById("passWord").value;
 
     // Hash the password to see if it matches the stored hash
@@ -22,6 +22,9 @@ function loginUser(){
                     
                     window.location.href = "../index.html";
                     return;
+                }
+                else{
+                    window.location.href = "./login.html";
                 }
             }
             alert("Invalid username or password.");
