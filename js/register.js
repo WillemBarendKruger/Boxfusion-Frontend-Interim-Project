@@ -7,8 +7,6 @@ function registerUser() {
     for (let i = 0; i < users.length; i++) {
         if (users[i].Username === username) {
             alert("Username already exists. Please choose a different one.");
-            // override default action of the form
-            
             return;
         }
     }
