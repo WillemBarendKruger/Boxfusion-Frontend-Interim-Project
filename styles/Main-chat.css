@@ -34,7 +34,10 @@ a:hover{
 /* Sidebar */
 .sidebar {
     width: 200px;
-    background-color: #1f1f1f;
+    background-color: rgb(32, 32, 32);
+    background-image: linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black), linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black), linear-gradient(to bottom, rgb(8, 8, 8), rgb(32, 32, 32));
+    background-size: 10px 10px, 10px 10px, 10px 5px;
+    background-position: 0px 0px, 5px 5px, 0px 0px;
     padding: 20px;
     color: #ccc;
     display: none;
@@ -89,6 +92,7 @@ a:hover{
   font-size: 18px;
   cursor: pointer;
   color: whitesmoke;
+  border: none;
 }
 
 .gear-icon:hover {
@@ -192,6 +196,11 @@ div#chatHistory{
     border-radius: 5px;
   }
 
+.typing{
+  color: rgb(98, 98, 3);
+  display: none; 
+  z-index: 3000;
+}
 .send-btn {
   background: none;
   border: none;
@@ -261,4 +270,8 @@ div#chatHistory{
 .modal button:hover {
   background-color: orange;
   color: black;
+}
+
+.userSelect{
+  display: inline-flex;
 }
