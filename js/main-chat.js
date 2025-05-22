@@ -107,7 +107,7 @@ function renderUserList() {
         div.className = 'user group';
         div.innerHTML = `
             <div>
-                <a href="#" class="chat-open-group">${group.name} (Group)<i class="fa-solid fa-ellipsis-vertical"></i></a>
+                <a href="#" class="chat-open-group">${group.name} (Group)</a>
             </div>
         `;
         div.querySelector('.chat-open-group').addEventListener('click', (e) => {
@@ -243,13 +243,13 @@ function openGroupPopup() {
 
     users.forEach(user => {
         if (user.Username !== currentUser) {
-            const label = document.createElement("label");
-            label.className = "checkbox-label";
-            label.innerHTML = `
+            const div = document.createElement("div");
+            div.className = "userSelect"
+            div.innerHTML = `
+                <label class="checkbox-label">${user.Username}</label>
                 <input type="checkbox" value="${user.Username}" class="group-user-checkbox">
-                ${user.Username}
             `;
-            groupUsers.appendChild(label);
+            groupUsers.appendChild(div);
         }
     });
 }
