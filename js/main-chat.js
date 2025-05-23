@@ -4,45 +4,6 @@ function showSidebar() {
     sidebar.style.display = (sidebar.style.display === "none" || sidebar.style.display === "") ? "block" : "none";
 }
 
-// function addUser() {
-//     document.getElementById("addUser").style.display = "flex";
-
-// }
-
-// function addNewUser() {
-//     const username = document.getElementById("newUsername").value.toUpperCase().trim();
-
-//     const password = document.getElementById("newPassword").value;
-
-//     if (!username || !password) {
-//         alert("Please fill in all fields.");
-//         return;
-//     }
-
-//     let users = JSON.parse(localStorage.getItem('users')) || [];
-
-//     if (users.some(user => user.Username === username)) {
-//         alert("Username already exists. Please choose a different one.");
-//         return;
-//     }
-
-//     window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
-//         .then(hashed => {
-//             const hashArray = Array.from(new Uint8Array(hashed));
-//             const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
-//             users.push({ Username: username, Password: hashHex, user_Active: Date.now() });
-//             localStorage.setItem("users", JSON.stringify(users));
-//             alert("User added successfully.");
-//             renderUserList();
-//             closeAddUser();
-//         })
-//         .catch(err => console.error("Error hashing password", err));
-// }
-
-// function closeAddUser() {
-//     document.getElementById("addUser").style.display = "none";
-// }
-
 function renderUserList() {
     const userListEl = document.querySelector('.user-list');
     const users = JSON.parse(localStorage.getItem("users")) || [];
