@@ -30,6 +30,17 @@ function renderUserList() {
         }
     });
 
+     for(let i = 0 ; i < users.length; i++){
+            let status = document.querySelectorAll(".status");
+            console.log(status[i].innerHTML);
+            if( status[i].innerHTML === "online"){
+                status[i].style = "color: greenyellow;";
+            }
+            else{
+                status[i].style = "color: red;";
+            }
+        }
+
     groups.forEach(group => {
         const div = document.createElement('div');
         div.className = 'user group';
@@ -46,7 +57,7 @@ function renderUserList() {
     });
 }
 
-// event listener for redering users and there status
+// event listener for rendering users and there status
 window.addEventListener("storage", function (event) {
     if (event.key === "users" || event.key === "groups" || event.key === "user_Active") {
         renderUserList();
