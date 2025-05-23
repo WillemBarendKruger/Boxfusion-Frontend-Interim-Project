@@ -13,27 +13,31 @@ function loginUser(){
             let users = JSON.parse(localStorage.getItem('users')) || [];
             for (let i = 0; i < users.length; i++) {
                 if (users[i].Username === username && users[i].Password === hashHex) {
-                    alert("Login successful!");
                     // set the current logged in user
                     sessionStorage.setItem('currentUser', username);
                     // update the last activetime of user
                     let userActive = JSON.parse(localStorage.getItem("user_Active")) || {};
                     userActive[username] = Date.now();
-                    
-                    window.location.href = "./mainChat.html";
+                    document.getElementById("loggingIn").style.display = "none";
+                    document.getElementById("loggedIn").style.display = "flex";
                     renderUserList()
                     return;
                 }
                 else{
-                    window.location.href = "./login.html";
+                    // window.location.href = "./login.html";
+                    document.getElementById("heading").innerText = "Wrong credentials";
+                    document.getElementById("passWord").value = "";
                 }
             }
-            alert("Invalid username or password.");
         })
         .catch(function (error) {
             console.error("Error hashing password: ", error);
         });
 
+}
+
+let showOriginal = () => {
+    document.getElementById
 }
 
 function logOut() {
