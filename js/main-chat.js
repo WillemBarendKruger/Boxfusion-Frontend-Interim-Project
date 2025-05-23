@@ -46,11 +46,11 @@ function renderUserList() {
     });
 }
 
-
 // event listener for redering users and there status
 window.addEventListener("storage", function (event) {
-    if (event.key === "users") {
+    if (event.key === "users" || event.key === "groups" || event.key === "user_Active") {
         renderUserList();
+
     }
 });
 
