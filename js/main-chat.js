@@ -4,77 +4,44 @@ function showSidebar() {
     sidebar.style.display = (sidebar.style.display === "none" || sidebar.style.display === "") ? "block" : "none";
 }
 
-// change username
-function openNewUsername(){
-    document.getElementById("updateUsername").style.display = "flex";
-}
+// function addUser() {
+//     document.getElementById("addUser").style.display = "flex";
 
-function updatedUsername(){
-    const username = document.getElementById("inputUsername").value.toUpperCase().trim();
-    let currentUser = sessionStorage.getItem('currentUser');
-    let users = JSON.parse(localStorage.getItem('users')) || [];
+// }
 
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].Username === currentUser) {
-            console.log(users[i].Username)
-            if (confirm("Confirm username change to " + username)) {
-                users.splice(i, 1, {Username: username, Password: users[i].Password, user_Active: Date.now()});
-                sessionStorage.setItem('currentUser', username);
-                localStorage.setItem("users", JSON.stringify(users));
-                localStorage.setItem('user_Active', JSON.stringify({[username]: Date.now()}));
-                window.location.reload();
-                alert("Username updated successfully.");
-            }
-            closeUpdateUsername();
-            return;
-        }
-    }
-    localStorage.setItem("users", JSON.stringify(users));
-    renderUserList();
-}
+// function addNewUser() {
+//     const username = document.getElementById("newUsername").value.toUpperCase().trim();
 
-function closeUpdateUsername(){
-    document.getElementById("updateUsername").style.display = "none";
-}
+//     const password = document.getElementById("newPassword").value;
 
-function addUser() {
-    document.getElementById("addUser").style.display = "flex";
+//     if (!username || !password) {
+//         alert("Please fill in all fields.");
+//         return;
+//     }
 
-}
+//     let users = JSON.parse(localStorage.getItem('users')) || [];
 
-function addNewUser() {
-    const username = document.getElementById("newUsername").value.toUpperCase().trim();
+//     if (users.some(user => user.Username === username)) {
+//         alert("Username already exists. Please choose a different one.");
+//         return;
+//     }
 
-    const password = document.getElementById("newPassword").value;
+//     window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
+//         .then(hashed => {
+//             const hashArray = Array.from(new Uint8Array(hashed));
+//             const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
+//             users.push({ Username: username, Password: hashHex, user_Active: Date.now() });
+//             localStorage.setItem("users", JSON.stringify(users));
+//             alert("User added successfully.");
+//             renderUserList();
+//             closeAddUser();
+//         })
+//         .catch(err => console.error("Error hashing password", err));
+// }
 
-    if (!username || !password) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    let users = JSON.parse(localStorage.getItem('users')) || [];
-
-    if (users.some(user => user.Username === username)) {
-        alert("Username already exists. Please choose a different one.");
-        return;
-    }
-
-    window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
-        .then(hashed => {
-            const hashArray = Array.from(new Uint8Array(hashed));
-            const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
-            users.push({ Username: username, Password: hashHex, user_Active: Date.now() });
-            localStorage.setItem("users", JSON.stringify(users));
-            alert("User added successfully.");
-            renderUserList();
-            closeAddUser();
-        })
-        .catch(err => console.error("Error hashing password", err));
-}
-
-function closeAddUser() {
-    document.getElementById("addUser").style.display = "none";
-}
+// function closeAddUser() {
+//     document.getElementById("addUser").style.display = "none";
+// }
 
 function renderUserList() {
     const userListEl = document.querySelector('.user-list');
@@ -119,7 +86,13 @@ function renderUserList() {
 }
 
 
-// Initial page load
+// event listener for redering users and there status
+window.addEventListener("storage", function (event) {
+    if (event.key === "users") {
+        renderUserList();
+    }
+});
+
 window.onload = function () {
     renderUserList();
     const currentUser = sessionStorage.getItem('currentUser');
@@ -232,170 +205,6 @@ function openChatPopup(username) {
 
 }
 
-function openGroupPopup() {
-    const groupPopup = document.getElementById("groupPopup");
-    const groupUsers = document.getElementById("groupUsers");
-    groupPopup.style.display = "block";
-    groupUsers.innerHTML = "";
-
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const currentUser = sessionStorage.getItem("currentUser");
-
-    users.forEach(user => {
-        if (user.Username !== currentUser) {
-            const div = document.createElement("div");
-            div.className = "userSelect"
-            div.innerHTML = `
-                <label class="checkbox-label">${user.Username}</label>
-                <input type="checkbox" value="${user.Username}" class="group-user-checkbox">
-            `;
-            groupUsers.appendChild(div);
-        }
-    });
-}
-
-function createGroupChat() {
-  const groupName = document.getElementById("groupName").value.trim();
-  const selectedUsers = Array.from(document.querySelectorAll('input[name="groupUsers"]:checked')).map(ceckb => ceckb.value);
-
-  if (!groupName || selectedUsers.length === 0) {
-    alert("Please provide a group name and select at least one user.");
-    return;
-  }
-
-  const group = {
-    name: groupName,
-    members: selectedUsers,
-    messages: []
-  };
-
-  // Save to localStorage
-  const groups = JSON.parse(localStorage.getItem("groups") || "[]");
-  groups.push(group);
-  localStorage.setItem("groups", JSON.stringify(groups));
-
-  alert(`Group "${groupName}" created with users: ${selectedUsers.join(", ")}`);
-  closeGroupPopup();
-}
-
-
-function createGroupChat() {
-    const groupName = document.getElementById("groupName").value.trim();
-    const checkboxes = document.querySelectorAll(".group-user-checkbox:checked");
-    const selectedUsers = Array.from(checkboxes).map(ceckb => ceckb.value);
-    const currentUser = sessionStorage.getItem("currentUser");
-
-    if (!groupName) {
-        alert("Group name is required.");
-        return;
-    }
-
-    if (selectedUsers.length === 0) {
-        alert("Select at least one user to create a group.");
-        return;
-    }
-
-    const newGroup = {
-        name: groupName,
-        members: [currentUser, ...selectedUsers]
-    };
-
-    let groups = JSON.parse(localStorage.getItem("groups")) || [];
-
-    if (groups.some(group => group.name === groupName)) {
-        alert("A group with that name already exists.");
-        return;
-    }
-
-    groups.push(newGroup);
-    localStorage.setItem("groups", JSON.stringify(groups));
-    closeGroupPopup();
-    renderUserList();
-    alert("Group created successfully!");
-}
-
-function openGroupChat(groupName) {
-    const chatPopup = document.getElementById("chatPopup");
-    const chatHistory = document.getElementById("chatHistory");
-    const chatInput = document.getElementById("chatInput");
-    const sendBtn = document.getElementById("send-btn");
-
-    chatPopup.style.display = "flex";
-    chatPopup.setAttribute("data-group", groupName);
-    chatPopup.removeAttribute("data-chat-with");
-
-    chatPopup.querySelector(".chat-header > div").textContent = groupName + " (Group)";
-    document.getElementById("status").textContent = "group chat";
-
-    function populateChat() {
-        chatHistory.innerHTML = "";
-        const history = JSON.parse(localStorage.getItem("group_" + groupName)) || [];
-        history.forEach(msg => {
-            const msgEl = document.createElement("div");
-            msgEl.className = msg.sender === sessionStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
-            msgEl.textContent = `${msg.sender}: ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
-            chatHistory.appendChild(msgEl);
-        });
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
-
-    populateChat();
-
-    sendBtn.onclick = null;
-    sendBtn.onclick = () => {
-        const text = chatInput.value.trim();
-        if (text) {
-            const groupMessages = JSON.parse(localStorage.getItem("group_" + groupName)) || [];
-            groupMessages.push({ sender: sessionStorage.getItem("currentUser"), message: text, timestamp: Date.now() });
-            localStorage.setItem("group_" + groupName, JSON.stringify(groupMessages));
-            localStorage.removeItem(`typing_status_group_${groupName}_${sessionStorage.getItem("currentUser")}`);
-            populateChat();
-            document.getElementById("typing").style.display = "none";
-            chatInput.value = "";
-        }
-    };
-
-    // Handle typing status on input
-    chatInput.oninput = () => {
-         const currentUser = sessionStorage.getItem("currentUser");
-        const key = `typing_status_group_${groupName}_${currentUser}`;
-        localStorage.setItem(key, JSON.stringify({ typing: true, timestamp: Date.now() }));
-    };
-
-    // Check typing status from other users
-    let typingInterval;
-    clearInterval(typingInterval);
-    typingInterval = setInterval(() => {
-        const currentUser = sessionStorage.getItem("currentUser");
-        const group = JSON.parse(localStorage.getItem("groups")).find(g => g.name === groupName);
-        const indicator = document.getElementById("typing");
-
-        let typers = [];
-
-        group.members.forEach(member => {
-            if (member !== currentUser) {
-                const key = `typing_status_group_${groupName}_${member}`;
-                const status = JSON.parse(localStorage.getItem(key));
-                if (status && status.typing && Date.now() - status.timestamp < 1500) {
-                    typers.push(member);
-                }
-            }
-        });
-
-        if (typers.length > 0) {
-            indicator.textContent = typers.join(', ') + " is typing...";
-            indicator.style.display = "inline";
-        } else {
-            indicator.style.display = "none";
-        }
-    }, 1000);
-}
-
-function closeGroupPopup() {
-    document.getElementById("groupPopup").style.display = "none";
-    document.getElementById("groupName").value = "";
-}
-
 // Storage event listener for live updates
 window.addEventListener("storage", function (event) {
     if (event.key && (event.key.startsWith("chat_") || event.key.startsWith("group_"))) {
@@ -409,7 +218,7 @@ window.addEventListener("storage", function (event) {
     }
 });
 
-// Refresh one-to-one chat
+// Refresh chat
 function refreshChat(username) {
     const chatPopup = document.getElementById("chatPopup");
     if (chatPopup && chatPopup.style.display === "flex" && chatPopup.getAttribute("data-chat-with") === username) {
@@ -426,9 +235,4 @@ function refreshChat(username) {
     }
 }
 
-// Logout
-function logOut() {
-    localStorage.removeItem('user_Active');
-    alert("You have been logged out.");
-    window.location.href = "./login.html";
-}
+

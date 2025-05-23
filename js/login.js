@@ -34,3 +34,9 @@ function loginUser(){
         });
 
 }
+
+function logOut() {
+    localStorage.removeItem('user_Active');
+    alert("You have been logged out.");
+    window.location.href = "./login.html";
+}

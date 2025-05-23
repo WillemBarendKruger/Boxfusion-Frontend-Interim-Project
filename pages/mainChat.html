@@ -15,17 +15,21 @@
       <h3>Settings</h3>
       <div class="menu">
         <button class="menu-btn" onclick="openNewUsername()">Update Username</button>
-        <button class="menu-btn" onclick="addUser()">Add User</button>
         <button class="menu-btn" onclick="openGroupPopup()">Create new group</button> 
         <button class="menu-btn" onclick="logOut()">Log Out</button>
       </div>
     </aside>
 
-    <!-- Chat Application -->
+    <!-- User list -->
     <main class="main-chat">
       <header class="app-header">
-        <button class="gear-icon" onclick="showSidebar()"><i class="fa-solid fa-gear"></i></button>
-        <h2 id="username">UserName</h2>
+        <button class="menu-icon" onclick="showSidebar()"><i class="fa-solid fa-bars"></i></button>
+
+        <div id="user-info">
+            <i class="fa-solid fa-user"></i>
+            <h2 id="username">UserName</h2>
+        </div>
+
       </header>
       <section class="user-list">
         <!-- User and Group list will be rendered here -->
@@ -41,7 +45,7 @@
       <div id="chatHistory" class="chat-messages" style="height: 400px; overflow-y: auto; margin-bottom: 10px;"></div>
       <!-- display live typing -->
       <div id="typing" class="typing">
-        <small><i class="fa-solid fa-user"></i> is typing...</small>
+        <i class="fa-solid fa-comments"></i>
       </div>
       <div class="chat-input">
         <input id="chatInput" type="text" placeholder="Message..." />
@@ -59,16 +63,6 @@
       <button onclick="closeUpdateUsername()">Cancel</button>
     </div>
   </div>
-  <!-- Page to add new user -->
-  <div id="addUser" class="modal">
-    <div>
-      <h3 style="margin-bottom: 10px;">Add New User</h3>
-      <input type="text" id="newUsername" placeholder="Enter username" />
-      <input type="password" id="newPassword" placeholder="Enter password" />
-      <button onclick="addNewUser()">Add</button>
-      <button onclick="closeAddUser()">Cancel</button>
-    </div>
-  </div>
 
   <!-- Modal to create new group -->
   <div id="groupPopup" class="modal">
@@ -81,6 +75,16 @@
     </div>
   </div>
 
+  <!-- Confirm log out -->
+    <div id="logOutPopup" class="modal">
+        <div>
+        <h3>Are you sure you want to log out?</h3>
+        <button onclick="confirmLogOut()">Yes</button>
+        <button onclick="closeLogOutPopup()">No</button>
+        </div>
+    <script src="../js/login.js"></script>
+    <script src="../js/users.js"></script>
+    <script src="../js/group.js"></script>
   <script src="../js/main-chat.js"></script>
 </body>
 </html>
