@@ -20,14 +20,16 @@ h3{
 
 a{
   text-decoration: none;
-  color: rgb(255, 165, 0);
+  color: var(--textColor);
+  transition: 0.3s ease-in;
 }
 
 a:hover{
-  color: whitesmoke;
+  color: rgb(0, 255, 200);
+  font-size: 1.2rem;
   font-weight: 600;
   transform: scale(1.5);
-  transition: 0.3s ease;
+  transition: 0.3s ease-out;
 }
 
 .container {
