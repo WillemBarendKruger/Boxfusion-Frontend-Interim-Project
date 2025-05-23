@@ -6,10 +6,17 @@ function registerUser() {
     const users = JSON.parse(localStorage.getItem('users')) || [];
     for (let i = 0; i < users.length; i++) {
         if (users[i].Username === username) {
-            alert("Username already exists. Please choose a different one.");
+            // alert("Username already exists. Please choose a different one.");
+            const wrong = document.getElementById("heading");
+            wrong.innerHTML = "Username already taken";
             return;
         }
     }
+
+    const login = document.getElementById("login");
+    const sucess = document.getElementById("successRegister");
+        login.style.display = "none";
+        sucess.style.display = "flex";
 
     // Hash the password using Web Crypto API
     window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
@@ -21,8 +28,6 @@ function registerUser() {
             let userData = { Username: username, Password: hashHex, user_Active: Date.now() };
             users.push(userData);
             localStorage.setItem('users', JSON.stringify(users));
-            alert("User registered successfully!");
-            window.location.href = "./login.html";
         })
         .catch(function (error) {
             console.error("Error hashing password: ", error);
