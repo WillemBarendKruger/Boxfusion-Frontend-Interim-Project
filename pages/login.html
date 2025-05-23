@@ -7,27 +7,29 @@
     <link rel="stylesheet" href="../styles/login.css">
 </head>
 <body>
-    <div class="card">
-    <div class="card2">
-        <form class="form">
-            <p id="heading">Login</p>
-            <div class="field">
-                <input id="userName" type="text" class="input-field" placeholder="Username" autocomplete="off" required>
-            </div>
+    <main>
+        <div class="card">
+            <div class="card2">
+                <form class="form">
+                    <p id="heading">Login</p>
+                    <div class="field">
+                        <input id="userName" type="text" class="input-field" placeholder="Username" autocomplete="off" required>
+                    </div>
 
-            <div class="field">
-                <input id="passWord" type="password" class="input-field" placeholder="Password" required>
-            </div>
+                    <div class="field">
+                        <input id="passWord" type="password" class="input-field" placeholder="Password" required>
+                    </div>
 
-            <div class="btn">
-                <button type="submit" class="button1" onclick="loginUser()">Login</button>
-                <a href="register.html" class="button2">Register</a>
-                
+                    <div class="btn">
+                        <button type="submit" class="button1" onclick="loginUser()">Login</button>
+                        <a href="register.html" class="button2">Register</a>
+                        
+                    </div>
+                    <button type="submit" class="button3">Forgot Password</button>
+                </form>
             </div>
-            <button type="submit" class="button3">Forgot Password</button>
-        </form>
-    </div>
-    </div>
+            </div>
+    </main>
     <script src="../js/login.js"></script>
 </body>
 </html>
