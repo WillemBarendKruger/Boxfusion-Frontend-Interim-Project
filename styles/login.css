@@ -121,3 +121,19 @@ main{
 .card:hover {
   box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.30);
 }
+
+#loggedIn{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  color: rgb(0, 255, 200);
+}
+
+#loggedIn a{
+  display: flex;
+  font-size: smaller;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
