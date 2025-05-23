@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
     --backgroudColor: #212121;
     --btncolor: black;
     --buttonBackground: #00ff75;
