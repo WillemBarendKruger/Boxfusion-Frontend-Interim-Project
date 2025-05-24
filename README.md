@@ -74,3 +74,12 @@ message was sent.
 
 # Wireframe
 https://www.figma.com/design/PaPdtiSinG2QHMwqoWoZSD/Frontend-Iterm-Prj?node-id=0-1&t=Uoympn0WS4K74SGi-1
+
+# Instructions
+
+## open directory where you would like to run
+change the directory in the terminal to the working location
+## clone the repository
+git clone https://github.com/WillemBarendKruger/Boxfusion-Frontend-Interim-Project.git
+## run the login.html file
+open the project folder location and run the index.html file with either live server extions on VScode or double click the login.html in the pages directory.
