@@ -36,11 +36,15 @@ function loginUser(){
 
 }
 
-let showOriginal = () => {
-    document.getElementById
+const logOutPopup = () => {
+    const popup = document.getElementById("logOutPopup").style.display = "flex";
 }
 
 function logOut() {
     localStorage.removeItem('user_Active');
     window.location.href = "./login.html";
+}
+
+const closeLogOutPopup = () => {
+    document.getElementById("logOutPopup").style.display = "none";
 }
