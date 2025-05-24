@@ -178,7 +178,7 @@ const openChatPopup = (username) => {
 
     let typingInterval = null;
 
-    function checkTyping() {
+    const checkTyping = () => {
         const fromUser = sessionStorage.getItem('currentUser');
         const reverseKey = `typing_status_${username}_${fromUser}`;
         const status = JSON.parse(localStorage.getItem(reverseKey));
