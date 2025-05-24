@@ -1,4 +1,4 @@
-function registerUser() {
+const registerUser = () => {
     const username = document.getElementById("userName").value.toUpperCase().trim();
     const password = document.getElementById("passWord").value;
 
@@ -21,7 +21,7 @@ function registerUser() {
 
     // Hash the password using Web Crypto API
     window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
-        .then(function (hashedPassword) {
+        .then((hashedPassword) => {
             let hashArray = Array.from(new Uint8Array(hashedPassword));
             let hashHex = hashArray.map(passw => ('00' + passw.toString(16)).slice(-2)).join('');
 
@@ -30,7 +30,7 @@ function registerUser() {
             users.push(userData);
             localStorage.setItem('users', JSON.stringify(users));
         })
-        .catch(function (error) {
+        .catch((error) => {
             console.error("Error hashing password: ", error);
         });
 }

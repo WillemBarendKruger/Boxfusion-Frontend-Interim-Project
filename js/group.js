@@ -70,7 +70,6 @@ const openGroupChat = (groupName) => {
     chatPopup.removeAttribute("data-chat-with");
 
     chatPopup.querySelector(".chat-header > div").textContent = groupName + " (Group)";
-    // document.getElementById("status").textContent = "group chat";
     const groups = JSON.parse(localStorage.getItem("groups")) || [];
     const group = groups.find(g => g.name === groupName);
     if (group && group.members) {
@@ -125,7 +124,6 @@ const openGroupChat = (groupName) => {
         localStorage.setItem(key, JSON.stringify({ typing: true, timestamp: Date.now() }));
     };
 
-    // Listen for typing status changes using storage event
     const indicator = document.getElementById("typing");
     const currentUser = sessionStorage.getItem("currentUser");
     let typingTimeout;
@@ -160,16 +158,13 @@ const openGroupChat = (groupName) => {
         }
     });
 
-    // Also update when opening the chat
     updateTypingIndicator();
 
-    // Stop typing status when user stops typing
     chatInput.onblur = () => {
         const key = `typing_status_group_${groupName}_${currentUser}`;
         localStorage.setItem(key, JSON.stringify({ typing: false, timestamp: Date.now() }));
     };
 
-    // Optionally, stop typing after a short delay of inactivity
     chatInput.oninput = () => {
         const key = `typing_status_group_${groupName}_${currentUser}`;
         localStorage.setItem(key, JSON.stringify({ typing: true, timestamp: Date.now() }));
