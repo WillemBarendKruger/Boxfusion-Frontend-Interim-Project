@@ -1,7 +1,7 @@
-function openGroupPopup() {
-    const groupPopup = document.getElementById("groupPopup");
+const openGroupPopup = () => {
+    document.getElementById("groupPopup").style.display = "block";
     const groupUsers = document.getElementById("groupUsers");
-    groupPopup.style.display = "block";
+    document.getElementById("groupAlert").innerText = ""
     groupUsers.innerHTML = "";
 
     const users = JSON.parse(localStorage.getItem("users")) || [];
@@ -20,19 +20,22 @@ function openGroupPopup() {
     });
 }
 
-function createGroupChat() {
+const createGroupChat = () => {
     const groupName = document.getElementById("groupName").value.trim();
     const checkboxes = document.querySelectorAll(".group-user-checkbox:checked");
     const selectedUsers = Array.from(checkboxes).map(ceckb => ceckb.value);
     const currentUser = sessionStorage.getItem("currentUser");
+    const groupAlert = document.getElementById("groupAlert");
 
     if (!groupName) {
-        alert("Group name is required.");
+        groupAlert.innerText = "Please enter a group name";
+        groupAlert.style = "color: red;";
         return;
     }
 
     if (selectedUsers.length === 0) {
-        alert("Select at least one user to create a group.");
+        groupAlert.innerText = "Select at least one user to create a group";
+        groupAlert.style = "color: yellow;";
         return;
     }
 
@@ -44,7 +47,8 @@ function createGroupChat() {
     let groups = JSON.parse(localStorage.getItem("groups")) || [];
 
     if (groups.some(group => group.name === groupName)) {
-        alert("A group with that name already exists.");
+        groupAlert.innerText = "Group name already in use";
+        groupAlert.style = "color: red;"
         return;
     }
 
@@ -52,10 +56,10 @@ function createGroupChat() {
     localStorage.setItem("groups", JSON.stringify(groups));
     closeGroupPopup();
     renderUserList();
-    alert("Group created successfully!");
+    const createGroup = document.getElementById("");
 }
 
-function openGroupChat(groupName) {
+const openGroupChat = (groupName) => {
     const chatPopup = document.getElementById("chatPopup");
     const chatHistory = document.getElementById("chatHistory");
     const chatInput = document.getElementById("chatInput");
@@ -66,15 +70,33 @@ function openGroupChat(groupName) {
     chatPopup.removeAttribute("data-chat-with");
 
     chatPopup.querySelector(".chat-header > div").textContent = groupName + " (Group)";
-    document.getElementById("status").textContent = "group chat";
+    // document.getElementById("status").textContent = "group chat";
+    const groups = JSON.parse(localStorage.getItem("groups")) || [];
+    const group = groups.find(g => g.name === groupName);
+    if (group && group.members) {
+        document.getElementById("status").textContent = `Members: ${group.members.join(", ")}`;
+    } else {
+        document.getElementById("status").textContent = "Group members unavailable";
+    }
 
-    function populateChat() {
+    const populateChat = () => {
         chatHistory.innerHTML = "";
         const history = JSON.parse(localStorage.getItem("group_" + groupName)) || [];
         history.forEach(msg => {
             const msgEl = document.createElement("div");
             msgEl.className = msg.sender === sessionStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
-            msgEl.textContent = `${msg.sender}: ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
+            msgEl.innerHTML = `
+            <div class="messagediv">
+                <span class="sender">${msg.sender}:</span>
+                    <p class="message">${msg.message}</p>  
+                <span class="time">${new Date(msg.timestamp).toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true,
+                    })}
+                </span>
+            </div>
+            `;
             chatHistory.appendChild(msgEl);
         });
         chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -98,21 +120,22 @@ function openGroupChat(groupName) {
 
     // Handle typing status on input
     chatInput.oninput = () => {
-         const currentUser = sessionStorage.getItem("currentUser");
+        const currentUser = sessionStorage.getItem("currentUser");
         const key = `typing_status_group_${groupName}_${currentUser}`;
         localStorage.setItem(key, JSON.stringify({ typing: true, timestamp: Date.now() }));
     };
 
-    // Check typing status from other users
-    let typingInterval;
-    clearInterval(typingInterval);
-    typingInterval = setInterval(() => {
-        const currentUser = sessionStorage.getItem("currentUser");
-        const group = JSON.parse(localStorage.getItem("groups")).find(g => g.name === groupName);
-        const indicator = document.getElementById("typing");
+    // Listen for typing status changes using storage event
+    const indicator = document.getElementById("typing");
+    const currentUser = sessionStorage.getItem("currentUser");
+    let typingTimeout;
+
+    const updateTypingIndicator = () => {
+        const groups = JSON.parse(localStorage.getItem("groups")) || [];
+        const group = groups.find(g => g.name === groupName);
+        if (!group) return;
 
         let typers = [];
-
         group.members.forEach(member => {
             if (member !== currentUser) {
                 const key = `typing_status_group_${groupName}_${member}`;
@@ -124,15 +147,40 @@ function openGroupChat(groupName) {
         });
 
         if (typers.length > 0) {
-            indicator.textContent = typers.join(', ') + " is typing...";
+            indicator.innerHTML = `<i class="fa-brands fa-rocketchat"></i> ${typers.join(', ')}  is typing...`;
             indicator.style.display = "inline";
         } else {
             indicator.style.display = "none";
         }
-    }, 1000);
+    }
+
+    window.addEventListener("storage", (e) => {
+        if (e.key && e.key.startsWith(`typing_status_group_${groupName}_`)) {
+            updateTypingIndicator();
+        }
+    });
+
+    // Also update when opening the chat
+    updateTypingIndicator();
+
+    // Stop typing status when user stops typing
+    chatInput.onblur = () => {
+        const key = `typing_status_group_${groupName}_${currentUser}`;
+        localStorage.setItem(key, JSON.stringify({ typing: false, timestamp: Date.now() }));
+    };
+
+    // Optionally, stop typing after a short delay of inactivity
+    chatInput.oninput = () => {
+        const key = `typing_status_group_${groupName}_${currentUser}`;
+        localStorage.setItem(key, JSON.stringify({ typing: true, timestamp: Date.now() }));
+        if (typingTimeout) clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            localStorage.setItem(key, JSON.stringify({ typing: false, timestamp: Date.now() }));
+        }, 1500);
+    };
 }
 
-function closeGroupPopup() {
+const closeGroupPopup = () => {
     document.getElementById("groupPopup").style.display = "none";
     document.getElementById("groupName").value = "";
 }

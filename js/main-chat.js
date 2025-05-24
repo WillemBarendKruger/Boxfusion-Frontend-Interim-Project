@@ -42,6 +42,7 @@ const renderUserList = () => {
         }
 
     groups.forEach(group => {
+    if (group.members && group.members.includes(current)) { 
         const div = document.createElement('div');
         div.className = 'user group';
         div.innerHTML = `
@@ -54,7 +55,8 @@ const renderUserList = () => {
             openGroupChat(group.name);
         });
         userListEl.appendChild(div);
-    });
+    }
+});
 }
 
 // event listener for rendering users and there status
