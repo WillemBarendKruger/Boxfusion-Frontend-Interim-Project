@@ -1,10 +1,10 @@
 // Show sidebar
-function showSidebar() {
+const showSidebar = () => {
     let sidebar = document.getElementById("sidebar");
     sidebar.style.display = (sidebar.style.display === "none" || sidebar.style.display === "") ? "block" : "none";
 }
 
-function renderUserList() {
+const renderUserList = () => {
     const userListEl = document.querySelector('.user-list');
     const users = JSON.parse(localStorage.getItem("users")) || [];
     const current = sessionStorage.getItem("currentUser");
@@ -36,7 +36,7 @@ function renderUserList() {
             if( status[i].innerHTML === "online"){
                 status[i].style = "color: greenyellow;";
             }
-            else{
+            else if(status[i].innerHTML === "offline"){
                 status[i].style = "color: red;";
             }
         }
@@ -58,42 +58,51 @@ function renderUserList() {
 }
 
 // event listener for rendering users and there status
-window.addEventListener("storage", function (event) {
+window.addEventListener("storage", (event) => {
     if (event.key === "users" || event.key === "groups" || event.key === "user_Active") {
         renderUserList();
 
     }
 });
 
-window.onload = function () {
+window.onload = () => {
     renderUserList();
     const currentUser = sessionStorage.getItem('currentUser');
     markAsActive(currentUser);
-    setInterval(() => {
-        markAsActive(currentUser);
+    markAsActive(currentUser);
+
+// Update user list when user activity changes
+window.addEventListener("storage", (event) => {
+    if (event.key === "user_Active") {
         renderUserList();
-    }, 300000);
+    }
+});
+
+    // Periodically refresh active status to check for inactivity
+    // setInterval(() => {
+    //     markAsActive(currentUser);
+    // }, 300000);
     document.getElementById("username").innerHTML = currentUser;
 }
 
-function markAsActive(username) {
+const markAsActive = (username) => {
     const activeUser = JSON.parse(localStorage.getItem('user_Active')) || {};
     activeUser[username] = Date.now();
     localStorage.setItem('user_Active', JSON.stringify(activeUser));
 }
 
-function getActiveUser() {
+const getActiveUser = () => {
     const activeUsers = JSON.parse(localStorage.getItem('user_Active')) || {};
     const now = Date.now();
     const fiveMinutes = 5 * 60 * 1000;
     return Object.keys(activeUsers).filter(user => now - activeUsers[user] < fiveMinutes);
 }
 
-function getChatKey(user1, user2) {
+const getChatKey = (user1, user2) => {
     return 'chat_' + [user1, user2].sort().join('_');
 }
 
-function sendMessage(toUser, messageText) {
+const sendMessage = (toUser, messageText) => {
     const fromUser = sessionStorage.getItem('currentUser');
     const chatKey = getChatKey(fromUser, toUser);
     const chatMessages = JSON.parse(localStorage.getItem(chatKey)) || [];
@@ -102,13 +111,13 @@ function sendMessage(toUser, messageText) {
     refreshChat(toUser);
 }
 
-function loadChatHistory(withUser) {
+const loadChatHistory = (withUser) => {
     const fromUser = sessionStorage.getItem('currentUser');
     const chatKey = getChatKey(fromUser, withUser);
     return JSON.parse(localStorage.getItem(chatKey)) || [];
 }
 
-function openChatPopup(username) {
+const openChatPopup = (username) => {
     const chatPopup = document.getElementById("chatPopup");
     const chatHistory = document.getElementById("chatHistory");
     const chatInput = document.getElementById("chatInput");
@@ -121,13 +130,24 @@ function openChatPopup(username) {
     chatPopup.querySelector(".chat-header > div").textContent = username;
     document.getElementById("status").textContent = getActiveUser().includes(username) ? "online" : "offline";
 
-    function populateChat() {
+    const populateChat = () => {
         chatHistory.innerHTML = "";
         const history = loadChatHistory(username);
         history.forEach(msg => {
             const msgEl = document.createElement("div");
             msgEl.className = msg.sender === sessionStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
-            msgEl.textContent = `${msg.sender}: ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
+            msgEl.innerHTML = `
+            <div class="messagediv">
+                <span class="sender">${msg.sender}:</span>
+                    <p class="message">${msg.message}</p>  
+                <span class="time">${new Date(msg.timestamp).toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true,
+                    })}
+                </span>
+            </div>
+            `;
             chatHistory.appendChild(msgEl);
         });
         chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -154,7 +174,7 @@ function openChatPopup(username) {
     localStorage.setItem(typingKey, JSON.stringify({ typing: true, timestamp: Date.now() }));
     };
 
-    let typingInterval;
+    let typingInterval = null;
 
     function checkTyping() {
         const fromUser = sessionStorage.getItem('currentUser');
@@ -164,7 +184,7 @@ function openChatPopup(username) {
         const indicator = document.getElementById("typing");
 
         if (status && status.typing && Date.now() - status.timestamp < 1500) {
-            indicator.textContent = `${username} is typing...`;
+            indicator.innerHTML = `<i class="fa-brands fa-rocketchat"></i> ${username} is typing...`;
             indicator.style.display = "inline";
         } else {
             indicator.style.display = "none";
@@ -178,7 +198,7 @@ function openChatPopup(username) {
 }
 
 // Storage event listener for live updates
-window.addEventListener("storage", function (event) {
+window.addEventListener("storage", (event) => {
     if (event.key && (event.key.startsWith("chat_") || event.key.startsWith("group_"))) {
         const chatPopup = document.getElementById("chatPopup");
         if (chatPopup && chatPopup.style.display === "flex") {
@@ -191,7 +211,7 @@ window.addEventListener("storage", function (event) {
 });
 
 // Refresh chat
-function refreshChat(username) {
+const refreshChat = (username) => {
     const chatPopup = document.getElementById("chatPopup");
     if (chatPopup && chatPopup.style.display === "flex" && chatPopup.getAttribute("data-chat-with") === username) {
         const chatHistory = document.getElementById("chatHistory");

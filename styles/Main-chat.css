@@ -180,27 +180,55 @@ div#chatHistory{
 }
 
 .chat-message-sent {
-    background-color: rgb(0, 255, 200);
+    
     color: var(--buttonTextColor);
+    font-size: 1.2rem;
     align-self: flex-end;
     border-radius: 10px 0 10px 10px;
-    padding: 10px;
-    margin: 5px 0;
     max-width: 70%;
+    width: fit-content;
+    padding: 10px;
+}
+
+.chat-message-sent .message{
+  background-color: rgb(0, 255, 200);
 }
 
 .chat-message-received {
-    background-color: var(--textColor);
     color: var(--buttonTextColor);
+    font-size: 1.2rem;
     align-self: flex-start;
     border-radius: 0 10px 10px 10px;
-    padding: 10px;
-    margin: 5px 0;
     max-width: 70%;
+    width: fit-content;
+    padding: 10px;
+}
+
+.chat-message-received .message{
+  background-color: var(--textColor);
+}
+
+.message{
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.sender{
+  color: var(--textColor);
+  width: 100%;
+  font-size: small;
+}
+
+.time{
+  font-size: small;
+  color: var(--textColor);
+}
+
+.msgContainer{
+  padding: 10px 0px;
 }
 
 .chat-messages div {
-    padding: 10px;
     margin: 4px 0;
     border-radius: 5px;
   }
@@ -303,4 +331,13 @@ div#chatHistory{
 
 .userSelect{
   display: inline-flex;
+}
+
+#logOutPopup{
+  display: none;
+  padding: 20px;
+}
+
+#logOutPopup button{
+  padding: 10px 15px;
 }
