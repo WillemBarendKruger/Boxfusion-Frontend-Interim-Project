@@ -1,6 +1,6 @@
 const openGroupPopup = () => {
-    document.getElementById("groupPopup").style.display = "block";
     const groupUsers = document.getElementById("groupUsers");
+    document.getElementById("groupPopup").style.display = "block";
     document.getElementById("groupAlert").innerText = ""
     groupUsers.innerHTML = "";
 
@@ -56,7 +56,6 @@ const createGroupChat = () => {
     localStorage.setItem("groups", JSON.stringify(groups));
     closeGroupPopup();
     renderUserList();
-    const createGroup = document.getElementById("");
 }
 
 const openGroupChat = (groupName) => {
@@ -72,11 +71,8 @@ const openGroupChat = (groupName) => {
     chatPopup.querySelector(".chat-header > div").textContent = groupName + " (Group)";
     const groups = JSON.parse(localStorage.getItem("groups")) || [];
     const group = groups.find(g => g.name === groupName);
-    if (group && group.members) {
-        document.getElementById("status").textContent = `Members: ${group.members.join(", ")}`;
-    } else {
-        document.getElementById("status").textContent = "Group members unavailable";
-    }
+    const status = document.getElementById("status");
+     status.textContent = (group && group.members) ? `Members: ${group.members.join(", ")}`: "Group members unavailable";
 
     const populateChat = () => {
         chatHistory.innerHTML = "";
@@ -138,9 +134,7 @@ const openGroupChat = (groupName) => {
             if (member !== currentUser) {
                 const key = `typing_status_group_${groupName}_${member}`;
                 const status = JSON.parse(localStorage.getItem(key));
-                if (status && status.typing && Date.now() - status.timestamp < 1500) {
-                    typers.push(member);
-                }
+                if (status && status.typing && Date.now() - status.timestamp < 1500) typers.push(member);
             }
         });
 
@@ -153,12 +147,8 @@ const openGroupChat = (groupName) => {
     }
 
     window.addEventListener("storage", (e) => {
-        if (e.key && e.key.startsWith(`typing_status_group_${groupName}_`)) {
-            updateTypingIndicator();
-        }
+        if (e.key && e.key.startsWith(`typing_status_group_${groupName}_`)) updateTypingIndicator();
     });
-
-    updateTypingIndicator();
 
     chatInput.onblur = () => {
         const key = `typing_status_group_${groupName}_${currentUser}`;

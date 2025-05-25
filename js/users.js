@@ -1,8 +1,6 @@
-// change username
 const openNewUsername = () => {
     document.getElementById("updateUsername").style.display = "flex";
 }
-
 
 const updatedUsername = () => {
     const username = document.getElementById("inputUsername").value.toUpperCase().trim();

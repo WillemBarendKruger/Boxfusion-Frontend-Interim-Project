@@ -23,7 +23,7 @@ const loginUser = () => {
                 }
                 else{
                     document.getElementById("heading").innerText = "Wrong credentials";
-                    document.getElementById("passWord").value = "";
+                    password.value = "";
                 }
             }
         })
@@ -34,7 +34,7 @@ const loginUser = () => {
 }
 
 const logOutPopup = () => {
-    const popup = document.getElementById("logOutPopup").style.display = "flex";
+    document.getElementById("logOutPopup").style.display = "flex";
 }
 
 const logOut = () => {
