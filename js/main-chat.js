@@ -242,3 +242,11 @@ const refreshChat = (username) => {
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 }
+
+const handleUserListVisibility = () => {
+    const userList = document.getElementById("main-chat");;
+    userList.style.display = (window.innerWidth <= 500) ? "none" : "flex" ;
+}
+
+window.addEventListener('resize', handleUserListVisibility);
+window.addEventListener('DOMContentLoaded', handleUserListVisibility);
