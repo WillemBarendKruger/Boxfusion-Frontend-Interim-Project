@@ -4,6 +4,11 @@ const showSidebar = () => {
     sidebar.style.display = (sidebar.style.display === "none" || sidebar.style.display === "") ? "block" : "none";
 }
 
+const hideUserList = () => {
+    const userlist = document.getElementById("main-chat");
+    userlist.style.display = userlist.style.display === "flex" ? "none" : "flex";
+}
+
 const renderUserList = () => {
     const userListEl = document.querySelector('.user-list');
     const users = JSON.parse(localStorage.getItem("users")) || [];
@@ -61,10 +66,7 @@ const renderUserList = () => {
 
 // event listener for rendering users and there status
 window.addEventListener("storage", (event) => {
-    if (event.key === "users" || event.key === "groups" || event.key === "user_Active") {
-        renderUserList();
-
-    }
+    if (event.key === "users" || event.key === "groups" || event.key === "user_Active") renderUserList();
 });
 
 window.onload = () => {
@@ -75,9 +77,7 @@ window.onload = () => {
 
 // Update user list when user activity changes
 window.addEventListener("storage", (event) => {
-    if (event.key === "user_Active") {
-        renderUserList();
-    }
+    if (event.key === "user_Active") renderUserList();
 });
 
     // Periodically refresh active status to check for inactivity

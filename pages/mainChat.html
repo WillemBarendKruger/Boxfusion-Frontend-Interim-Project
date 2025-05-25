@@ -12,7 +12,10 @@
   <div class="container">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
+      <div class="chat-header">
+        <button class="menu-icon" onclick="hideUserList()"><i class="fa-solid fa-address-book"></i></button>
       <h3>Settings</h3>
+      </div>
       <div class="menu">
         <button class="menu-btn" onclick="openNewUsername()">Update Username</button>
         <button class="menu-btn" onclick="openGroupPopup()">Create new group</button> 
@@ -21,7 +24,7 @@
     </aside>
 
     <!-- User list -->
-    <main class="main-chat">
+    <main id="main-chat" class="main-chat">
       <header class="app-header">
         <button class="menu-icon" onclick="showSidebar()"><i class="fa-solid fa-bars"></i></button>
 
@@ -39,6 +42,7 @@
     <!-- Chat Window -->
     <section id="chatPopup" class="chat-window" data-chat-with="">
       <div class="chat-header">
+        <button class="menu-icon" onclick="hideUserList()"><i class="fa-solid fa-address-book"></i></button>
         <div></div>
         <small class="status" id="status"></small>
       </div>
