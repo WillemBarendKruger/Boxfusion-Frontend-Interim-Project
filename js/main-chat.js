@@ -1,14 +1,3 @@
-// Show sidebar
-const showSidebar = () => {
-    let sidebar = document.getElementById("sidebar");
-    sidebar.style.display = (sidebar.style.display === "none" || sidebar.style.display === "") ? "block" : "none";
-}
-
-const hideUserList = () => {
-    const userlist = document.getElementById("main-chat");
-    userlist.style.display = userlist.style.display === "flex" ? "none" : "flex";
-}
-
 const renderUserList = () => {
     const userListEl = document.querySelector('.user-list');
     const users = JSON.parse(localStorage.getItem("users")) || [];
@@ -37,7 +26,6 @@ const renderUserList = () => {
 
      for(let i = 0 ; i < users.length; i++){
             let status = document.querySelectorAll(".status");
-            console.log(status[i].innerHTML);
             if( status[i].innerHTML === "online"){
                 status[i].style = "color: greenyellow;";
             }
@@ -55,8 +43,8 @@ const renderUserList = () => {
                 <a href="#" class="chat-open-group">${group.name} (Group)</a>
             </div>
         `;
-        div.querySelector('.chat-open-group').addEventListener('click', (e) => {
-            e.preventDefault();
+        div.querySelector('.chat-open-group').addEventListener('click', (event) => {
+            event.preventDefault();
             openGroupChat(group.name);
         });
         userListEl.appendChild(div);
@@ -64,7 +52,6 @@ const renderUserList = () => {
 });
 }
 
-// event listener for rendering users and there status
 window.addEventListener("storage", (event) => {
     if (event.key === "users" || event.key === "groups" || event.key === "user_Active") renderUserList();
 });
@@ -75,15 +62,10 @@ window.onload = () => {
     markAsActive(currentUser);
     markAsActive(currentUser);
 
-// Update user list when user activity changes
-window.addEventListener("storage", (event) => {
-    if (event.key === "user_Active") renderUserList();
-});
+    // Refresh active status to check for inactivity
+    document.addEventListener('mousemove', () => markAsActive(currentUser));
+    document.addEventListener('keydown', () => markAsActive(currentUser));
 
-    // Periodically refresh active status to check for inactivity
-    // setInterval(() => {
-    //     markAsActive(currentUser);
-    // }, 300000);
     document.getElementById("username").innerHTML = currentUser;
 }
 
@@ -124,6 +106,7 @@ const openChatPopup = (username) => {
     const chatHistory = document.getElementById("chatHistory");
     const chatInput = document.getElementById("chatInput");
     const sendBtn = document.getElementById("send-btn");
+    const users = JSON.parse(localStorage.getItem("users")) || [];
 
     chatPopup.style.display = "flex";
     chatPopup.setAttribute("data-chat-with", username);
@@ -131,6 +114,16 @@ const openChatPopup = (username) => {
 
     chatPopup.querySelector(".chat-header > div").textContent = username;
     document.getElementById("status").textContent = getActiveUser().includes(username) ? "online" : "offline";
+
+    for(let i = 0 ; i < users.length; i++){
+            let status = document.querySelectorAll(".status");
+            if( status[i].innerHTML === "online"){
+                status[i].style = "color: greenyellow;";
+            }
+            else if(status[i].innerHTML === "offline"){
+                status[i].style = "color: red;";
+            }
+        }
 
     const populateChat = () => {
         chatHistory.innerHTML = "";
@@ -176,8 +169,6 @@ const openChatPopup = (username) => {
     localStorage.setItem(typingKey, JSON.stringify({ typing: true, timestamp: Date.now() }));
     };
 
-    let typingInterval = null;
-
     const checkTyping = () => {
         const fromUser = sessionStorage.getItem('currentUser');
         const reverseKey = `typing_status_${username}_${fromUser}`;
@@ -193,9 +184,22 @@ const openChatPopup = (username) => {
         }
     }
 
-     // prevent multiple intervals
-    clearInterval(typingInterval);
-    typingInterval = setInterval(checkTyping, 1000);
+    window.addEventListener("storage", (event) => {
+        if (event.key === `typing_status_${username}_${sessionStorage.getItem('currentUser')}`) checkTyping();
+    });
+    checkTyping();
+
+    let typingTimeout;
+    chatInput.oninput = () => {
+        const from = sessionStorage.getItem('currentUser');
+        const key = `typing_status_${from}_${username}`;
+        localStorage.setItem(key, JSON.stringify({ typing: true, timestamp: Date.now() }));
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            localStorage.setItem(key, JSON.stringify({ typing: false, timestamp: Date.now() }));
+        }, 1200);
+        checkTyping();
+    };
 
 }
 
@@ -212,7 +216,6 @@ window.addEventListener("storage", (event) => {
     }
 });
 
-// Refresh chat
 const refreshChat = (username) => {
     const chatPopup = document.getElementById("chatPopup");
     if (chatPopup && chatPopup.style.display === "flex" && chatPopup.getAttribute("data-chat-with") === username) {
@@ -222,11 +225,20 @@ const refreshChat = (username) => {
         messages.forEach(msg => {
             const msgEl = document.createElement("div");
             msgEl.className = msg.sender === sessionStorage.getItem('currentUser') ? "chat-message-sent" : "chat-message-received";
-            msgEl.textContent = `${msg.sender}: ${msg.message}  ${new Date(msg.timestamp).toLocaleTimeString()}`;
+            msgEl.innerHTML = `
+            <div class="messagediv">
+                <span class="sender">${msg.sender}:</span>
+                    <p class="message">${msg.message}</p>  
+                <span class="time">${new Date(msg.timestamp).toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true,
+                    })}
+                </span>
+            </div>
+            `;
             chatHistory.appendChild(msgEl);
         });
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 }
-
-

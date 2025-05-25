@@ -9,7 +9,6 @@ const updatedUsername = () => {
 
     for (let i = 0; i < users.length; i++) {
         if (users[i].Username === currentUser) {
-            console.log(users[i].Username)
                 document.getElementById("logginOut").innerText = `Successfully Updated Username to ${username}`;
                 users.splice(i, 1, {Username: username, Password: users[i].Password, user_Active: Date.now()});
                 sessionStorage.setItem('currentUser', username);
