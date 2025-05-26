@@ -244,8 +244,8 @@ const refreshChat = (username) => {
 }
 
 const handleUserListVisibility = () => {
-    const userList = document.getElementById("main-chat");;
-    userList.style.display = (window.innerWidth <= 500) ? "none" : "flex" ;
+    document.getElementById("main-chat").style.display = (window.innerWidth <= 500) ? "none" : "flex";
+    document.getElementById("sidebar").style.display = (window.innerWidth <= 510) ? "none" : "";
 }
 
 window.addEventListener('resize', handleUserListVisibility);
