@@ -18,7 +18,6 @@ const loginUser = () => {
                     userActive[username] = Date.now();
                     document.getElementById("loggingIn").style.display = "none";
                     document.getElementById("loggedIn").style.display = "flex";
-                    renderUserList()
                     return;
                 }
                 else{
